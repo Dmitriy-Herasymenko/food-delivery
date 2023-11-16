@@ -4,6 +4,8 @@ import { UsersModule } from "./users/users.module";
 import { ConfigModule } from "@nestjs/config";
 import { User } from "./users/users.model";
 import { AuthModule } from "./auth/auth.module";
+import { VotesModule } from "./vote/vote.module";
+import { Vote } from './vote/vote.model';
  
 
 @Module({
@@ -18,12 +20,12 @@ import { AuthModule } from "./auth/auth.module";
       username: process.env.POSTGRES_USERNAME,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User],
+      models: [User, Vote],
       autoLoadModels: true,
     }),
     UsersModule,
     AuthModule,
-
+    VotesModule
   ],
 })
 export class AppModule {}

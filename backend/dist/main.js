@@ -4,8 +4,8 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
 async function start() {
-    const PORT = process.env.PORT || 7000;
-    const app = await core_1.NestFactory.create(app_module_1.AppModule, { cors: true });
+    const PORT = process.env.PORT || 5000;
+    const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const config = new swagger_1.DocumentBuilder()
         .setTitle("Food Delivery")
         .setDescription("Food Delivery Documentation Rest API")

@@ -3,15 +3,9 @@ import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 async function start() {
-  const PORT = process.env.PORT || 7000;
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const PORT = process.env.PORT || 5000;
+  const app = await NestFactory.create(AppModule);
 
-  // app.enableCors({
-  //   origin: 'http://localhost:5000',
-  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  //   allowedHeaders: 'Content-Type, Accept',
-  //   credentials: true,
-  // });
 
   const config = new DocumentBuilder()
     .setTitle("Food Delivery")

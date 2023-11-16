@@ -13,6 +13,8 @@ const users_module_1 = require("./users/users.module");
 const config_1 = require("@nestjs/config");
 const users_model_1 = require("./users/users.model");
 const auth_module_1 = require("./auth/auth.module");
+const vote_module_1 = require("./vote/vote.module");
+const vote_model_1 = require("./vote/vote.model");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -28,11 +30,12 @@ exports.AppModule = AppModule = __decorate([
                 username: process.env.POSTGRES_USERNAME,
                 password: process.env.POSTGRES_PASSWORD,
                 database: process.env.POSTGRES_DB,
-                models: [users_model_1.User],
+                models: [users_model_1.User, vote_model_1.Vote],
                 autoLoadModels: true,
             }),
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
+            vote_module_1.VotesModule
         ],
     })
 ], AppModule);
