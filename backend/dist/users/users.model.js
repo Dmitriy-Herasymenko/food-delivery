@@ -16,8 +16,8 @@ let User = exports.User = class User extends sequelize_typescript_1.Model {
 };
 __decorate([
     (0, swagger_1.ApiProperty)({ example: "1", description: "unique identificator" }),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true }),
-    __metadata("design:type", Number)
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.UUID, defaultValue: sequelize_typescript_1.DataType.UUIDV4, primaryKey: true }),
+    __metadata("design:type", String)
 ], User.prototype, "id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: "user@gmail.com", description: "mail address" }),

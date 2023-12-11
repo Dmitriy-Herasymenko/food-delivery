@@ -18,4 +18,28 @@ __decorate([
     (0, swagger_1.ApiProperty)({ example: "1", description: "userId" }),
     __metadata("design:type", String)
 ], CreateVoteDto.prototype, "userId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: true, description: "isOpen" }),
+    __metadata("design:type", Boolean)
+], CreateVoteDto.prototype, "isOpen", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: "2023-12-11T12:00:00Z", description: "startDate" }),
+    __metadata("design:type", Date)
+], CreateVoteDto.prototype, "startDate", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: "2023-12-25T12:00:00Z", description: "endDate" }),
+    __metadata("design:type", Date)
+], CreateVoteDto.prototype, "endDate", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: "Votes Pizza Delivery", description: "title" }),
+    __metadata("design:type", String)
+], CreateVoteDto.prototype, "title", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: [
+            { option: "Option 1", description: "Description for Option 1" },
+            { option: "Option 2", description: "Description for Option 2" },
+        ],
+        description: "votes" }),
+    __metadata("design:type", Array)
+], CreateVoteDto.prototype, "votes", void 0);
 //# sourceMappingURL=create-vote.dto.js.map

@@ -24,8 +24,13 @@ let VotesController = exports.VotesController = class VotesController {
     }
     async create(voteDto) {
         try {
-            if (!voteDto.userId) {
-                throw new common_1.HttpException('userId is required', common_1.HttpStatus.BAD_REQUEST);
+            const userExists = await this.voteService.userExists(voteDto.userId);
+            if (!userExists) {
+                throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
+            }
+            const openVote = await this.voteService.findOpenVote(voteDto.userId);
+            if (openVote) {
+                throw new common_1.HttpException('User already has an open vote', common_1.HttpStatus.FORBIDDEN);
             }
             const createdVote = await this.voteService.createVote(voteDto);
             return createdVote;
@@ -33,6 +38,9 @@ let VotesController = exports.VotesController = class VotesController {
         catch (error) {
             throw new common_1.HttpException(error.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    getAll() {
+        return this.voteService.getAllVotes();
     }
 };
 __decorate([
@@ -44,6 +52,14 @@ __decorate([
     __metadata("design:paramtypes", [create_vote_dto_1.CreateVoteDto]),
     __metadata("design:returntype", Promise)
 ], VotesController.prototype, "create", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "Get All Votes" }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: [vote_model_1.Vote] }),
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], VotesController.prototype, "getAll", null);
 exports.VotesController = VotesController = __decorate([
     (0, swagger_1.ApiTags)("Vote"),
     (0, common_1.Controller)("voting"),

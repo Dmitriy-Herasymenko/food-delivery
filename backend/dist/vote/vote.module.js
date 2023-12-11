@@ -12,6 +12,7 @@ const vote_controller_1 = require("./vote.controller");
 const vote_service_1 = require("./vote.service");
 const sequelize_1 = require("@nestjs/sequelize");
 const vote_model_1 = require("./vote.model");
+const users_module_1 = require("../users/users.module");
 let VotesModule = exports.VotesModule = class VotesModule {
 };
 exports.VotesModule = VotesModule = __decorate([
@@ -19,7 +20,8 @@ exports.VotesModule = VotesModule = __decorate([
         controllers: [vote_controller_1.VotesController],
         providers: [vote_service_1.VotesService],
         imports: [
-            sequelize_1.SequelizeModule.forFeature([vote_model_1.Vote])
+            sequelize_1.SequelizeModule.forFeature([vote_model_1.Vote]),
+            users_module_1.UsersModule,
         ],
         exports: [vote_service_1.VotesService]
     })
