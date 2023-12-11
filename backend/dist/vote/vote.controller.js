@@ -22,8 +22,17 @@ let VotesController = exports.VotesController = class VotesController {
     constructor(voteService) {
         this.voteService = voteService;
     }
-    create(voteDto) {
-        return this.voteService.createVote(voteDto);
+    async create(voteDto) {
+        try {
+            if (!voteDto.userId) {
+                throw new common_1.HttpException('userId is required', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const createdVote = await this.voteService.createVote(voteDto);
+            return createdVote;
+        }
+        catch (error) {
+            throw new common_1.HttpException(error.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 };
 __decorate([
@@ -33,7 +42,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_vote_dto_1.CreateVoteDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], VotesController.prototype, "create", null);
 exports.VotesController = VotesController = __decorate([
     (0, swagger_1.ApiTags)("Vote"),

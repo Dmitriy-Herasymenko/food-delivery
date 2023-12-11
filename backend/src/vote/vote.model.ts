@@ -7,7 +7,7 @@ interface VoteCreationAtrr {
 
 @Table({tableName: "votes"})
 export class Vote extends Model <Vote, VoteCreationAtrr> {
-    @ApiProperty({example: "1", description: "userID"})
+    @ApiProperty({example: "1", description: "userId"})
     @Column({type: DataType.STRING, unique: true, allowNull: false})
     userId: string;
 }

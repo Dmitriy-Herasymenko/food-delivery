@@ -1,3 +1,3 @@
 export declare class CreateVoteDto {
-    readonly id: string;
+    readonly userId: string;
 }
