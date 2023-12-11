@@ -15,7 +15,7 @@ const swagger_1 = require("@nestjs/swagger");
 let Vote = exports.Vote = class Vote extends sequelize_typescript_1.Model {
 };
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "1", description: "userID" }),
+    (0, swagger_1.ApiProperty)({ example: "1", description: "userId" }),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, unique: true, allowNull: false }),
     __metadata("design:type", String)
 ], Vote.prototype, "userId", void 0);

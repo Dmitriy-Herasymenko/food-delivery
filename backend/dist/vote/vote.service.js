@@ -21,6 +21,12 @@ let VotesService = exports.VotesService = class VotesService {
         this.voteRepository = voteRepository;
     }
     async createVote(dto) {
+        const existingVote = await this.voteRepository.findOne({
+            where: { userId: dto.userId },
+        });
+        if (existingVote) {
+            throw new common_1.HttpException('Vote with this userId already exists', common_1.HttpStatus.FORBIDDEN);
+        }
         const vote = await this.voteRepository.create(dto);
         return vote;
     }

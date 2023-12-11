@@ -15,7 +15,7 @@ class CreateVoteDto {
 }
 exports.CreateVoteDto = CreateVoteDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "1", description: "user id" }),
+    (0, swagger_1.ApiProperty)({ example: "1", description: "userId" }),
     __metadata("design:type", String)
-], CreateVoteDto.prototype, "id", void 0);
+], CreateVoteDto.prototype, "userId", void 0);
 //# sourceMappingURL=create-vote.dto.js.map
