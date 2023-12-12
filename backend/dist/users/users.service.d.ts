@@ -6,4 +6,5 @@ export declare class UsersService {
     createUser(dto: CreateUserDto): Promise<User>;
     getAllUSers(): Promise<User[]>;
     getUserByEmail(email: string): Promise<User>;
+    findOne(userId: string): Promise<User | null>;
 }

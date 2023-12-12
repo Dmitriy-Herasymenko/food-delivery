@@ -16,7 +16,7 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const users_model_1 = require("./users.model");
-let UsersService = exports.UsersService = class UsersService {
+let UsersService = class UsersService {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
@@ -29,10 +29,17 @@ let UsersService = exports.UsersService = class UsersService {
         return users;
     }
     async getUserByEmail(email) {
-        const user = await this.userRepository.findOne({ where: { email: email }, include: { all: true } });
+        const user = await this.userRepository.findOne({
+            where: { email: email },
+            include: { all: true },
+        });
         return user;
     }
+    async findOne(userId) {
+        return this.userRepository.findOne({ where: { id: userId } });
+    }
 };
+exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(users_model_1.User)),

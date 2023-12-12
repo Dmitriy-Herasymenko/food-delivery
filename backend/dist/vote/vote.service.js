@@ -16,24 +16,45 @@ exports.VotesService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const vote_model_1 = require("./vote.model");
-let VotesService = exports.VotesService = class VotesService {
-    constructor(voteRepository) {
+const users_service_1 = require("../users/users.service");
+const uuid_1 = require("uuid");
+let VotesService = class VotesService {
+    constructor(voteRepository, userService) {
         this.voteRepository = voteRepository;
+        this.userService = userService;
     }
     async createVote(dto) {
-        const existingVote = await this.voteRepository.findOne({
-            where: { userId: dto.userId },
-        });
-        if (existingVote) {
-            throw new common_1.HttpException('Vote with this userId already exists', common_1.HttpStatus.FORBIDDEN);
+        try {
+            const votesWithId = dto.votes.map((vote) => ({ ...vote, id: (0, uuid_1.v4)() }));
+            const vote = await this.voteRepository.create({
+                ...dto,
+                votes: votesWithId,
+            });
+            return vote;
         }
-        const vote = await this.voteRepository.create(dto);
-        return vote;
+        catch (error) {
+            console.error("Error creating vote:", error);
+            throw error;
+        }
+    }
+    async findOpenVote(userId) {
+        return this.voteRepository.findOne({
+            where: { userId, isOpen: true },
+        });
+    }
+    async userExists(userId) {
+        const user = await this.userService.findOne(userId);
+        return !!user;
+    }
+    async getAllVotes() {
+        const voiting = await this.voteRepository.findAll();
+        return voiting;
     }
 };
+exports.VotesService = VotesService;
 exports.VotesService = VotesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(vote_model_1.Vote)),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [Object, users_service_1.UsersService])
 ], VotesService);
 //# sourceMappingURL=vote.service.js.map

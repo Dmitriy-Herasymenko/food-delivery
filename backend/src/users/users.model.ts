@@ -1,5 +1,6 @@
 import { Model, Table, Column, DataType } from "sequelize-typescript";
 import { ApiProperty } from "@nestjs/swagger";
+import { v4 as uuidv4 } from 'uuid';
 
 interface UserCreationAtrr {
     email: string;
@@ -9,8 +10,8 @@ interface UserCreationAtrr {
 @Table({tableName: "users"})
 export class User extends Model <User, UserCreationAtrr> {
     @ApiProperty({example: "1", description: "unique identificator"})
-    @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
-    id: number;
+    @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4, primaryKey: true })
+    id: string;
     @ApiProperty({example: "user@gmail.com", description: "mail address"})
     @Column({type: DataType.STRING, unique: true, allowNull: false})
     email: string;

@@ -4,7 +4,7 @@ interface UserCreationAtrr {
     password: string;
 }
 export declare class User extends Model<User, UserCreationAtrr> {
-    id: number;
+    id: string;
     email: string;
     password: string;
 }

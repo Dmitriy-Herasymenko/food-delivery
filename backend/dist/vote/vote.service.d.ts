@@ -1,7 +1,12 @@
-import { Vote } from './vote.model';
-import { CreateVoteDto } from './dto/create-vote.dto';
+import { Vote } from "./vote.model";
+import { CreateVoteDto } from "./dto/create-vote.dto";
+import { UsersService } from "../users/users.service";
 export declare class VotesService {
     private voteRepository;
-    constructor(voteRepository: typeof Vote);
+    private userService;
+    constructor(voteRepository: typeof Vote, userService: UsersService);
     createVote(dto: CreateVoteDto): Promise<Vote>;
+    findOpenVote(userId: string): Promise<Vote | null>;
+    userExists(userId: string): Promise<boolean>;
+    getAllVotes(): Promise<Vote[]>;
 }

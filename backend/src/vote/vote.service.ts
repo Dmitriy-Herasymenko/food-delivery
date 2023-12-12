@@ -1,22 +1,43 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Vote } from './vote.model';
-import { CreateVoteDto } from './dto/create-vote.dto';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/sequelize";
+import { Vote } from "./vote.model";
+import { CreateVoteDto } from "./dto/create-vote.dto";
+import { UsersService } from "../users/users.service";
+import { v4 as uuidv4 } from "uuid";
 
 @Injectable()
 export class VotesService {
-  constructor(@InjectModel(Vote) private voteRepository: typeof Vote) {}
+  constructor(@InjectModel(Vote) private voteRepository: typeof Vote, private userService: UsersService) {}
 
   async createVote(dto: CreateVoteDto) {
-    const existingVote = await this.voteRepository.findOne({
-      where: { userId: dto.userId },
-    });
+    try {
+      const votesWithId = dto.votes.map((vote) => ({ ...vote, id: uuidv4() }));
 
-    if (existingVote) {
-      throw new HttpException('Vote with this userId already exists', HttpStatus.FORBIDDEN);
+      const vote = await this.voteRepository.create({
+        ...dto,
+        votes: votesWithId,
+      });
+
+      return vote;
+    } catch (error) {
+      console.error("Error creating vote:", error);
+      throw error;
     }
-    const vote = await this.voteRepository.create(dto);
+  }
 
-    return vote;
+  async findOpenVote(userId: string): Promise<Vote | null> {
+    return this.voteRepository.findOne({
+      where: { userId, isOpen: true },
+    });
+  }
+
+  async userExists(userId: string): Promise<boolean> {
+    const user = await this.userService.findOne(userId); 
+    return !!user;
+  }
+
+  async getAllVotes() {
+    const voiting = await this.voteRepository.findAll();
+    return voiting;
   }
 }

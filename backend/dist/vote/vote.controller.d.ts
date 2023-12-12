@@ -5,4 +5,5 @@ export declare class VotesController {
     private voteService;
     constructor(voteService: VotesService);
     create(voteDto: CreateVoteDto): Promise<Vote>;
+    getAll(): Promise<Vote[]>;
 }

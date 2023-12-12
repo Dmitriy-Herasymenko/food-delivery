@@ -12,13 +12,62 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Vote = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const swagger_1 = require("@nestjs/swagger");
-let Vote = exports.Vote = class Vote extends sequelize_typescript_1.Model {
+const uuid_1 = require("uuid");
+let Vote = class Vote extends sequelize_typescript_1.Model {
+    static addUuid(instance) {
+        if (!instance.id) {
+            instance.id = (0, uuid_1.v4)();
+        }
+    }
 };
+exports.Vote = Vote;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: "1", description: "id" }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.UUID, defaultValue: sequelize_typescript_1.DataType.UUIDV4, primaryKey: true }),
+    __metadata("design:type", String)
+], Vote.prototype, "id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: "1", description: "userId" }),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, unique: true, allowNull: false }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
     __metadata("design:type", String)
 ], Vote.prototype, "userId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: true, description: "isOpen" }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, allowNull: false }),
+    __metadata("design:type", Boolean)
+], Vote.prototype, "isOpen", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: "2023-12-11T12:00:00Z", description: "startDate" }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATE, allowNull: false }),
+    __metadata("design:type", Date)
+], Vote.prototype, "startDate", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: "2023-12-25T12:00:00Z", description: "endDate" }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATE, allowNull: false }),
+    __metadata("design:type", Date)
+], Vote.prototype, "endDate", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: "Votes Pizza Delivery", description: "title" }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
+    __metadata("design:type", String)
+], Vote.prototype, "title", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: [
+            { option: "Option 1", description: "Description for Option 1" },
+            { option: "Option 2", description: "Description for Option 2" },
+        ],
+        description: "votes",
+    }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.JSONB, allowNull: false }),
+    __metadata("design:type", Array)
+], Vote.prototype, "votes", void 0);
+__decorate([
+    sequelize_typescript_1.BeforeValidate,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Vote]),
+    __metadata("design:returntype", void 0)
+], Vote, "addUuid", null);
 exports.Vote = Vote = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: "votes" })
 ], Vote);

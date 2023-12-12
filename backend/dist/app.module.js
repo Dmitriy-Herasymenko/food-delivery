@@ -15,8 +15,9 @@ const users_model_1 = require("./users/users.model");
 const auth_module_1 = require("./auth/auth.module");
 const vote_module_1 = require("./vote/vote.module");
 const vote_model_1 = require("./vote/vote.model");
-let AppModule = exports.AppModule = class AppModule {
+let AppModule = class AppModule {
 };
+exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
