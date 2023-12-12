@@ -18,7 +18,7 @@ const create_user_dto_1 = require("./dto/create-user.dto");
 const users_service_1 = require("./users.service");
 const swagger_1 = require("@nestjs/swagger");
 const users_model_1 = require("./users.model");
-let UsersController = exports.UsersController = class UsersController {
+let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
     }
@@ -29,6 +29,7 @@ let UsersController = exports.UsersController = class UsersController {
         return this.userService.getAllUSers();
     }
 };
+exports.UsersController = UsersController;
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Create user" }),
     (0, swagger_1.ApiResponse)({ status: 200, type: users_model_1.User }),

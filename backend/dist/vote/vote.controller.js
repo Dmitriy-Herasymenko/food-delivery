@@ -18,7 +18,7 @@ const create_vote_dto_1 = require("./dto/create-vote.dto");
 const vote_service_1 = require("./vote.service");
 const swagger_1 = require("@nestjs/swagger");
 const vote_model_1 = require("./vote.model");
-let VotesController = exports.VotesController = class VotesController {
+let VotesController = class VotesController {
     constructor(voteService) {
         this.voteService = voteService;
     }
@@ -35,6 +35,7 @@ let VotesController = exports.VotesController = class VotesController {
         }
     }
 };
+exports.VotesController = VotesController;
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Create vote" }),
     (0, swagger_1.ApiResponse)({ status: 200, type: vote_model_1.Vote }),
