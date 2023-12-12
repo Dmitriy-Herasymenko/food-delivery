@@ -18,7 +18,7 @@ const sequelize_1 = require("@nestjs/sequelize");
 const vote_model_1 = require("./vote.model");
 const users_service_1 = require("../users/users.service");
 const uuid_1 = require("uuid");
-let VotesService = exports.VotesService = class VotesService {
+let VotesService = class VotesService {
     constructor(voteRepository, userService) {
         this.voteRepository = voteRepository;
         this.userService = userService;
@@ -51,6 +51,7 @@ let VotesService = exports.VotesService = class VotesService {
         return voiting;
     }
 };
+exports.VotesService = VotesService;
 exports.VotesService = VotesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(vote_model_1.Vote)),

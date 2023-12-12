@@ -13,13 +13,14 @@ exports.Vote = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const swagger_1 = require("@nestjs/swagger");
 const uuid_1 = require("uuid");
-let Vote = exports.Vote = class Vote extends sequelize_typescript_1.Model {
+let Vote = class Vote extends sequelize_typescript_1.Model {
     static addUuid(instance) {
         if (!instance.id) {
             instance.id = (0, uuid_1.v4)();
         }
     }
 };
+exports.Vote = Vote;
 __decorate([
     (0, swagger_1.ApiProperty)({ example: "1", description: "id" }),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.UUID, defaultValue: sequelize_typescript_1.DataType.UUIDV4, primaryKey: true }),

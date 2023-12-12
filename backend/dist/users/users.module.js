@@ -12,8 +12,9 @@ const users_controller_1 = require("./users.controller");
 const users_service_1 = require("./users.service");
 const sequelize_1 = require("@nestjs/sequelize");
 const users_model_1 = require("./users.model");
-let UsersModule = exports.UsersModule = class UsersModule {
+let UsersModule = class UsersModule {
 };
+exports.UsersModule = UsersModule;
 exports.UsersModule = UsersModule = __decorate([
     (0, common_1.Module)({
         controllers: [users_controller_1.UsersController],

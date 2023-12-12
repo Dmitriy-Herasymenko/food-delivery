@@ -12,8 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const swagger_1 = require("@nestjs/swagger");
-let User = exports.User = class User extends sequelize_typescript_1.Model {
+let User = class User extends sequelize_typescript_1.Model {
 };
+exports.User = User;
 __decorate([
     (0, swagger_1.ApiProperty)({ example: "1", description: "unique identificator" }),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.UUID, defaultValue: sequelize_typescript_1.DataType.UUIDV4, primaryKey: true }),

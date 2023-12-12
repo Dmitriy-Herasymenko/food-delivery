@@ -13,8 +13,9 @@ const vote_service_1 = require("./vote.service");
 const sequelize_1 = require("@nestjs/sequelize");
 const vote_model_1 = require("./vote.model");
 const users_module_1 = require("../users/users.module");
-let VotesModule = exports.VotesModule = class VotesModule {
+let VotesModule = class VotesModule {
 };
+exports.VotesModule = VotesModule;
 exports.VotesModule = VotesModule = __decorate([
     (0, common_1.Module)({
         controllers: [vote_controller_1.VotesController],

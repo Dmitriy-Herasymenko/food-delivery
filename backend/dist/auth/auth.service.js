@@ -14,7 +14,7 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const bcrypt = require("bcryptjs");
-let AuthService = exports.AuthService = class AuthService {
+let AuthService = class AuthService {
     constructor(userService, jwtService) {
         this.userService = userService;
         this.jwtService = jwtService;
@@ -50,6 +50,7 @@ let AuthService = exports.AuthService = class AuthService {
         throw new common_1.UnauthorizedException({ message: "Invalid email or password" });
     }
 };
+exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_1.UsersService,
