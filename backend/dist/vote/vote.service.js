@@ -25,7 +25,11 @@ let VotesService = class VotesService {
     }
     async createVote(dto) {
         try {
-            const votesWithId = dto.votes.map((vote) => ({ ...vote, id: (0, uuid_1.v4)() }));
+            const votesWithId = dto.votes.map((vote) => ({
+                ...vote,
+                id: (0, uuid_1.v4)(),
+                voteCount: 0,
+            }));
             const vote = await this.voteRepository.create({
                 ...dto,
                 votes: votesWithId,
@@ -36,6 +40,21 @@ let VotesService = class VotesService {
             console.error("Error creating vote:", error);
             throw error;
         }
+    }
+    async voteForOption(voteId, optionIndex) {
+        const vote = await this.voteRepository.findByPk(voteId);
+        if (!vote) {
+            throw new common_1.NotFoundException("Voting not found");
+        }
+        if (vote.endDate < new Date()) {
+            throw new common_1.BadRequestException("The voting has ended");
+        }
+        const selectedOption = vote.votes[optionIndex];
+        if (!selectedOption) {
+            throw new common_1.BadRequestException("Invalid option index");
+        }
+        selectedOption.voteCount += 1;
+        await vote.save();
     }
     async findOpenVote(userId) {
         return this.voteRepository.findOne({
@@ -49,6 +68,36 @@ let VotesService = class VotesService {
     async getAllVotes() {
         const voiting = await this.voteRepository.findAll();
         return voiting;
+    }
+    async vote(id, userId, idVote) {
+        try {
+            let vote = await this.voteRepository.findByPk(id);
+            if (!vote) {
+                return "Vote not found";
+            }
+            if (vote.usersIdVoted && vote.usersIdVoted.includes(userId)) {
+                return "User has already voted";
+            }
+            const currentVote = vote.votes.find((option) => option.id === idVote);
+            if (currentVote) {
+                currentVote.voteCount += 1;
+                if (!vote.usersIdVoted) {
+                    vote.usersIdVoted = [];
+                }
+                vote.usersIdVoted.push(userId);
+                await this.voteRepository.update({
+                    votes: vote.votes,
+                    usersIdVoted: vote.usersIdVoted,
+                }, { where: { id } });
+                return "Vote successful";
+            }
+            else {
+                return "Option not found";
+            }
+        }
+        catch (error) {
+            return "Internal server error";
+        }
     }
 };
 exports.VotesService = VotesService;

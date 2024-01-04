@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, HttpException, HttpStatus } from "@nestjs/common";
+import { Body, Controller, Post, Get, Param, HttpException, HttpStatus } from "@nestjs/common";
 import { CreateVoteDto } from "./dto/create-vote.dto";
 import { VotesService } from "./vote.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -11,7 +11,14 @@ export class VotesController {
 
   @ApiOperation({ summary: "Create vote" })
   @ApiResponse({ status: 200, type: Vote })
-
+  @Post('createVote')
+  async vote(
+    @Body('id') id: string,
+    @Body('userId') userId: string,
+    @Body('idVote') idVote: string,
+  ) {
+    return this.voteService.vote(id, userId, idVote);
+  }
   @Post()
   async create(@Body() voteDto: CreateVoteDto) {
     try {

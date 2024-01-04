@@ -54,14 +54,19 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: [
-            { option: "Option 1", description: "Description for Option 1" },
-            { option: "Option 2", description: "Description for Option 2" },
+            { option: "Option 1", description: "Description for Option 1", voteCount: 0 },
+            { option: "Option 2", description: "Description for Option 2", voteCount: 0 },
         ],
         description: "votes",
     }),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.JSONB, allowNull: false }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.JSONB, allowNull: false, defaultValue: [] }),
     __metadata("design:type", Array)
 ], Vote.prototype, "votes", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: ["userId1", "userId2"], description: "usersIdVoted" }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.ARRAY(sequelize_typescript_1.DataType.STRING), allowNull: true }),
+    __metadata("design:type", Array)
+], Vote.prototype, "usersIdVoted", void 0);
 __decorate([
     sequelize_typescript_1.BeforeValidate,
     __metadata("design:type", Function),
@@ -69,6 +74,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], Vote, "addUuid", null);
 exports.Vote = Vote = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: "votes" })
+    (0, sequelize_typescript_1.Table)({ tableName: "votes", timestamps: false })
 ], Vote);
 //# sourceMappingURL=vote.model.js.map

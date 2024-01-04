@@ -22,6 +22,9 @@ let VotesController = class VotesController {
     constructor(voteService) {
         this.voteService = voteService;
     }
+    async vote(id, userId, idVote) {
+        return this.voteService.vote(id, userId, idVote);
+    }
     async create(voteDto) {
         try {
             const userExists = await this.voteService.userExists(voteDto.userId);
@@ -47,6 +50,15 @@ exports.VotesController = VotesController;
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Create vote" }),
     (0, swagger_1.ApiResponse)({ status: 200, type: vote_model_1.Vote }),
+    (0, common_1.Post)('createVote'),
+    __param(0, (0, common_1.Body)('id')),
+    __param(1, (0, common_1.Body)('userId')),
+    __param(2, (0, common_1.Body)('idVote')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], VotesController.prototype, "vote", null);
+__decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
