@@ -7,7 +7,7 @@ interface UserCreationAtrr {
     password: string;
 }
 
-@Table({tableName: "users"})
+@Table({tableName: "users", timestamps: false})
 export class User extends Model <User, UserCreationAtrr> {
     @ApiProperty({example: "1", description: "unique identificator"})
     @Column({ type: DataType.UUID, defaultValue: DataType.UUIDV4, primaryKey: true })

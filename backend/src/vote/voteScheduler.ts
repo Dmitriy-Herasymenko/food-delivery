@@ -1,17 +1,19 @@
 // voteScheduler.ts
-import { Vote } from './vote.model';
-import { Op } from 'sequelize';
+import { Vote } from "./vote.model";
+import { Op } from "sequelize";
 
 const closeVotes = async () => {
   try {
+    const currentDateUTC2 = new Date();
+    currentDateUTC2.setHours(currentDateUTC2.getHours() + 2);
     const openVotesPastEndDate = await Vote.findAll({
-        where: {
-          isOpen: true,
-          endDate: { [Op.lte]: new Date() },
-        },
-      });
-  
-      console.log(`Found ${openVotesPastEndDate.length} open votes to close.`);
+      where: {
+        isOpen: true,
+        endDate: { [Op.lte]: currentDateUTC2 },
+      },
+    });
+
+    console.log(`Found ${openVotesPastEndDate.length} open votes to close.`);
 
     const updates = openVotesPastEndDate.map(async (vote) => {
       try {
@@ -26,14 +28,14 @@ const closeVotes = async () => {
 
     await Promise.all(updates);
 
-    console.log('Votes closed');
+    console.log("Votes closed");
   } catch (error) {
-    console.error('Error when closing voting:', error);
+    console.error("Error when closing voting:", error);
   }
 };
 
 export const startVoteScheduler = () => {
-  const interval = 24 * 60 * 60 * 1000;
+  const interval = 1 * 60 * 1000;
   closeVotes();
   setInterval(closeVotes, interval);
 };
