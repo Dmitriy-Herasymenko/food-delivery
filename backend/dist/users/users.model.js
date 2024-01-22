@@ -26,6 +26,11 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: "user", description: "user name" }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, unique: true, allowNull: false }),
+    __metadata("design:type", String)
+], User.prototype, "userName", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ example: "123456789", description: "password" }),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, unique: true }),
     __metadata("design:type", String)

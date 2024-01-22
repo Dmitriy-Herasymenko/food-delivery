@@ -1,8 +1,8 @@
 import { api } from "../makeRequest";
 
-const getUrlLogin = "/auth/response";
+const getUrlLogin = "/auth/registration";
 
-export const Registration = async (params:any) => {
+export const RegistrationApi = async (params:any) => {
     try {
        const response = await api.post(getUrlLogin, params);
        return response;

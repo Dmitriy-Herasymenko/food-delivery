@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { classNames } from "./styles";
 import { Login } from "../../../shared/api";
+import { useNavigate } from "react-router-dom";
+
 
 export const LogIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
+
 
   const LoginRequest = async () => {
     const data = {
@@ -13,7 +17,9 @@ export const LogIn = () => {
     };
 
     const response = await Login(data);
-    console.log("response: ", response);
+    if(response) {
+      navigate("/voiting");
+    }
   };
 
   return (

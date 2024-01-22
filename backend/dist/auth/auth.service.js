@@ -36,9 +36,13 @@ let AuthService = class AuthService {
         return this.generateToken(user);
     }
     async generateToken(user) {
-        const payload = { email: user.email, id: user.id };
+        const payload = { email: user.email, id: user.id, userName: user.userName };
+        console.log("payload", payload);
         return {
             token: this.jwtService.sign(payload),
+            userId: user.id,
+            email: user.email,
+            userName: user.userName
         };
     }
     async validateUser(userDto) {
