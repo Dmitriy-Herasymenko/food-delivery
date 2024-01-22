@@ -1,19 +1,26 @@
 import { useState } from "react";
 import { classNames } from "./styles";
-import { Login } from "../../../shared/api";
+import { RegistrationApi } from "../../../shared/api";
+import { useNavigate } from "react-router-dom";
+
 
 export const Registration = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+  const navigate = useNavigate();
 
   const LoginRequest = async () => {
     const data = {
-      email: email,
-      password: password,
+      email,
+      password,
+      userName,
     };
 
-    const response = await Login(data);
-    console.log("response: ", response);
+    const response = await RegistrationApi(data);
+    if(response) {
+      navigate("/voiting");
+    }
   };
 
   return (
@@ -30,6 +37,17 @@ export const Registration = () => {
               placeholder="Email Address"
               className={classNames.input}
               onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className={classNames.label}>
+              <span className={classNames.labelText}>User Name</span>
+            </label>
+            <input
+              type="text"
+              placeholder="User Name"
+              className={classNames.input}
+              onChange={(e) => setUserName(e.target.value)}
             />
           </div>
           <div>

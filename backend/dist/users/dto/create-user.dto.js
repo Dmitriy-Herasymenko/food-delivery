@@ -19,6 +19,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "email", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: "user", description: "user name" }),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "userName", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ example: "123456789", description: "password" }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
