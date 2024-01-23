@@ -1,6 +1,6 @@
 export const styles = {
     votingStatus: {
-        container: "max-w-md mx-auto bg-white p-6 rounded-md shadow-md",
+        container: " bg-white p-6 rounded-md shadow-md",
         wrapper: "mb-4",
         label: "block text-sm font-medium text-gray-600",
         progressWrapper: "mt-2",
@@ -13,7 +13,7 @@ export const styles = {
             
     },
     voteSubmission: {
-        container: "max-w-md mx-auto bg-white p-6 rounded-md shadow-md",
+        container: "bg-white p-6 rounded-md shadow-md",
         wrapper: "mb-4",
         label: "block text-sm font-medium text-gray-600",
         optionsWrapper: "flex flex-col space-y-2",
