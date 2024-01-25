@@ -30,30 +30,23 @@ export const VoteSubmission: React.FC<VoteSubmissionProps> = ({
 
   return (
     <div className={styles.voteSubmission.container}>
-      <label htmlFor="options" className={styles.voteSubmission.label}>
-        {titleVote}
-      </label>
       <form onSubmit={handleSubmit}>
-        <div className={styles.voteSubmission.container}>
-          <label htmlFor="options" className={styles.voteSubmission.label}>
-            Опції
-          </label>
-
-          <div className={styles.voteSubmission.optionsWrapper}>
-            {options.map((option, index) => (
-              <div key={index} className={styles.voteSubmission.option}>
-                <input
-                  type="radio"
-                  name="options"
-                  value={option.id}
-                  checked={idVote === option.id}
-                  onChange={() => handleOptionChange(option.id)}
-                />
-                <label>{option.description}</label>
-              </div>
-            ))}
+        <label htmlFor="options" className={styles.voteSubmission.label}>
+          {titleVote}
+        </label>
+        {options.map((option, index) => (
+          <div key={index} className={styles.voteSubmission.option}>
+            <input
+              type="radio"
+              name="options"
+              className={styles.voteSubmission.radio}
+              value={option.id}
+              checked={idVote === option.id}
+              onChange={() => handleOptionChange(option.id)}
+            />
+            <label>{option.description}</label>
           </div>
-        </div>
+        ))}
 
         <button type="submit" className={styles.voteSubmission.buttonSubmit}>
           Відправити голос

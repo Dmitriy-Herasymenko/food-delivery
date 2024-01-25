@@ -2,6 +2,11 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { HandleCreateVoting, CreatingVoting} from './types';
 import { format } from 'date-fns';
+import {
+MdAdd,
+MdRemove
+} from "react-icons/md";
+import { styles } from './styles';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
@@ -28,86 +33,94 @@ export const VotingForm: React.FC<VotingFormProps> = ({setCreatingVoting, creati
       ...creatingVoting,
       options: [...creatingVoting?.options, newOption],
     });
-    console.log("creatingVoting", creatingVoting)
+    setNewOption({ option: '', description: '' });
+  };
+
+  const handleRemoveOption = (indexRemove:number) => {
+    const updatedOptions = creatingVoting?.options.filter((_, index) => index !== indexRemove);
+    setCreatingVoting({
+      ...creatingVoting,
+      options: updatedOptions,
+    });
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
+    <div className={styles.votingForm.container}>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-600">
+          <div>
+            <label htmlFor="first-name" className="block text-sm font-semibold leading-6 text-gray-900">
             Назва голосування
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 p-2 w-full border rounded-md"
-          />
-        </div>
+            </label>
+            <div className="mt-2.5">
+              <input
+                type="text"
+                name="first-name"
+                id="first-name"
+                onChange={(e) => setTitle(e.target.value)}
+                className="block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
 
-        <div className="mb-4">
-          <label htmlFor="startDate" className="block text-sm font-medium text-gray-600">
+        <div className="mt-2.5">
+          <label htmlFor="startDate" className="block text-sm font-semibold leading-6 text-gray-900">
             Початок голосування
           </label>
+          <div className="mt-2.5">
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             showTimeSelect
-            className="block text-sm font-medium text-gray-600"
+            className="block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             dateFormat="Pp"
           />
+          </div>
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="endDate" className="block text-sm font-medium text-gray-600">
+        <div className="mt-2.5">
+          <label htmlFor="endDate" className="block text-sm font-semibold leading-6 text-gray-900">
             Закінчення голосування
           </label>
+          <div className="mt-2.5">
           <DatePicker
             selected={endDate}
             onChange={(date) => setEndDate(date)}
             showTimeSelect
-            className="block text-sm font-medium text-gray-600"
+            className="block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             dateFormat="Pp"
           />
+          </div>
         </div>
 
 
-        <div className="mb-4">
+        <div className="mt-2.5">
           <label htmlFor="options" className="block text-sm font-medium text-gray-600">
             Опції
           </label>
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-2  p-1">
             {creatingVoting?.options.map((option, index) => (
-              <div key={index} className="flex items-center space-x-2">
+              <div key={index} className="flex items-center justify-between space-x-2 block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 <span>{option.description}</span>
+                <MdRemove onClick={() => handleRemoveOption(index)} className='text-2xl text-red-500 ml-2.5 group-hover:text-white cursor-pointer'/>
               </div>
             ))}
           </div>
-          <div className="mt-2">
+          <div className="mt-2.5 flex items-center">
             <input
               type="text"
               id="newOption"
               name="newOption"
               value={newOption.option}
               onChange={(e) => setNewOption({ ...newOption, option: e.target.value, description: e.target.value })}
-              className="mt-1 p-2 w-full border rounded-md"
+              className="block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
-            <button
-              type="button"
-              onClick={handleAddOption}
-              className="mt-2 bg-green-500 text-white p-2 rounded-md"
-            >
-              Додати опцію
-            </button>
+            <MdAdd onClick={handleAddOption} className='text-2xl text-[#4F46E5] ml-2.5 group-hover:text-white cursor-pointer' />
           </div>
         </div>
 
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md mb-4"
+          className="mt-2.5 bg-[#4F46E5] text-white p-2 rounded-md mb-4"
         >
           Створити голосування
         </button>

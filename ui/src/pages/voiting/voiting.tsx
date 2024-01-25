@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { VoteOption, GetVoting, CreateVoting } from "../../shared/api";
 import { VotingForm, VoteSubmission, VotingStatus } from "./";
 import { Voting, HandleCreateVoting, CreatingVoting, CreateVote } from './types';
+import { styles } from './styles';
 import "react-datepicker/dist/react-datepicker.css";
 
 const VOITING_OBJ = {
@@ -102,13 +103,15 @@ export const Voiting = () => {
   return (
     <>
       {!isCreateVoted && isVote && (
-        <button
-          type="button"
-          onClick={handleCreateVote}
-          className="mt-2 bg-green-500 text-white p-2 rounded-md"
-        >
-          Створити голосування
-        </button>
+               <div className={styles.createButtonWrapper}>
+               <a
+                 href="#"
+                 onClick={handleCreateVote}
+                 className={styles.createButton}
+               >
+                  Створити голосування
+               </a>
+             </div>
       )}
 
       {isOpenVote && (
