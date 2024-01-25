@@ -1,19 +1,16 @@
-import { useState } from 'react'
-import {
-  Bars3Icon,
-} from '@heroicons/react/24/outline'
-
-
-
+import { useState } from "react";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const userName = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   return (
     <header className="bg-white shadow-md">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-
+      <nav
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        aria-label="Global"
+      >
         <div className="flex lg:hidden">
           <button
             type="button"
@@ -25,10 +22,17 @@ export const Header = () => {
           </button>
         </div>
 
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">{userName}</a>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
+          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            {userName}
+          </a>
+          <img
+            className="inline-block h-8 w-8 rounded-full ring-2 ml-2.5 ring-white"
+            src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            alt=""
+          />
         </div>
       </nav>
     </header>
-  )
-}
+  );
+};
