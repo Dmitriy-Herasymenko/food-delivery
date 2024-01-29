@@ -4,7 +4,7 @@ import {
   MdOutlineLogout,
 } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { BiMessageSquareDots } from "react-icons/bi";
+import { BiMessageSquareDots, BiMessage } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
@@ -41,6 +41,7 @@ export const SideNavbar: React.FC<SidebarProps>  = ({ className }) => {
                 <h3 className="text-base text-white group-hover:text-white font-semibold ">
                   Messages
                 </h3>
+                <span> + 1</span>
               </div>
 
               <div className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-[#4338CA] p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto" onClick={() => navigate("/dashboard")}>
