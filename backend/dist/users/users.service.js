@@ -16,17 +16,22 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const users_model_1 = require("./users.model");
+const users_gateway_1 = require("./users.gateway");
 let UsersService = class UsersService {
-    constructor(userRepository) {
+    constructor(userRepository, usersGateway) {
         this.userRepository = userRepository;
+        this.usersGateway = usersGateway;
     }
     async createUser(dto) {
         const user = await this.userRepository.create(dto);
         return user;
     }
-    async getAllUSers() {
+    async getAllUsers() {
         const users = await this.userRepository.findAll();
         return users;
+    }
+    async getUserById(id) {
+        return this.userRepository.findByPk(id);
     }
     async getUserByEmail(email) {
         const user = await this.userRepository.findOne({
@@ -38,11 +43,33 @@ let UsersService = class UsersService {
     async findOne(userId) {
         return this.userRepository.findOne({ where: { id: userId } });
     }
+    async sendMessage(senderId, receiverId, content) {
+        const sender = await this.userRepository.findByPk(senderId);
+        if (!sender) {
+            throw new common_1.NotFoundException(`User with ID ${senderId} not found`);
+        }
+        const receiver = await this.userRepository.findByPk(receiverId);
+        if (!receiver) {
+            throw new common_1.NotFoundException(`Receiver with ID ${receiverId} not found`);
+        }
+        const message = {
+            text: content,
+            username: sender.userName,
+        };
+        sender.sentMessages = sender.sentMessages || [];
+        sender.sentMessages.push(message);
+        receiver.receivedMessages = receiver.receivedMessages || [];
+        receiver.receivedMessages.push(message);
+        await this.userRepository.update({ sentMessages: sender.sentMessages }, { where: { id: senderId } });
+        await this.userRepository.update({ receivedMessages: receiver.receivedMessages }, { where: { id: receiverId } });
+        this.usersGateway.server.emit('newMessage', message);
+        return sender;
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, sequelize_1.InjectModel)(users_model_1.User)),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [Object, users_gateway_1.UsersGateway])
 ], UsersService);
 //# sourceMappingURL=users.service.js.map

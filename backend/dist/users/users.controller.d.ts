@@ -6,4 +6,10 @@ export declare class UsersController {
     constructor(userService: UsersService);
     create(userDto: CreateUserDto): Promise<User>;
     getAll(): Promise<User[]>;
+    getUserById(id: string): Promise<User>;
+    sendMessage(data: {
+        senderId: string;
+        receiverId: string;
+        content: string;
+    }): Promise<User>;
 }
