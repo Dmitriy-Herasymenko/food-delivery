@@ -3,10 +3,11 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './users.model';
+import { UsersGateway } from './users.gateway';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, UsersGateway],
   imports: [
     SequelizeModule.forFeature([User])
   ],

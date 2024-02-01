@@ -26,7 +26,17 @@ let UsersController = class UsersController {
         return this.userService.createUser(userDto);
     }
     getAll() {
-        return this.userService.getAllUSers();
+        return this.userService.getAllUsers();
+    }
+    async getUserById(id) {
+        const user = await this.userService.getUserById(id);
+        if (!user) {
+            throw new common_1.NotFoundException('User not found');
+        }
+        return user;
+    }
+    sendMessage(data) {
+        return this.userService.sendMessage(data.senderId, data.receiverId, data.content);
     }
 };
 exports.UsersController = UsersController;
@@ -47,6 +57,24 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAll", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "Get User by ID" }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: users_model_1.User }),
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUserById", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "Send Message to User" }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: users_model_1.User }),
+    (0, common_1.Post)('send-message'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "sendMessage", null);
 exports.UsersController = UsersController = __decorate([
     (0, swagger_1.ApiTags)("Users"),
     (0, common_1.Controller)("users"),

@@ -17,7 +17,11 @@ let User = class User extends sequelize_typescript_1.Model {
 exports.User = User;
 __decorate([
     (0, swagger_1.ApiProperty)({ example: "1", description: "unique identificator" }),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.UUID, defaultValue: sequelize_typescript_1.DataType.UUIDV4, primaryKey: true }),
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.UUID,
+        defaultValue: sequelize_typescript_1.DataType.UUIDV4,
+        primaryKey: true,
+    }),
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
 __decorate([
@@ -26,7 +30,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "user", description: "user name" }),
+    (0, swagger_1.ApiProperty)({ example: "user", description: "user" }),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, unique: true, allowNull: false }),
     __metadata("design:type", String)
 ], User.prototype, "userName", void 0);
@@ -35,6 +39,28 @@ __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: [
+            { message: "Hello!", userName: "User" },
+            { message: "Hello!", userName: "User" },
+        ],
+        description: "sentMessages",
+    }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.JSONB, allowNull: false, defaultValue: [] }),
+    __metadata("design:type", Array)
+], User.prototype, "sentMessages", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: [
+            { message: "Hello!", userName: "User" },
+            { message: "Hello!", userName: "User" },
+        ],
+        description: "receivedMessages",
+    }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.JSONB, allowNull: false, defaultValue: [] }),
+    __metadata("design:type", Array)
+], User.prototype, "receivedMessages", void 0);
 exports.User = User = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: "users", timestamps: false })
 ], User);
