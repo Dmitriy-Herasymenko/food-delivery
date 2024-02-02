@@ -12,6 +12,7 @@ interface UserCreationAtrr {
   userName: string;
   sentMessages: string[];
   receivedMessages: string[];
+  unreadMessages: Message[]; 
 }
 
 @Table({ tableName: "users", timestamps: false })
@@ -55,4 +56,7 @@ export class User extends Model<User, UserCreationAtrr> {
   })
   @Column({ type: DataType.JSONB, allowNull: false, defaultValue: [] })
   receivedMessages: Message[];
+
+  @Column({ type: DataType.JSONB, allowNull: false, defaultValue: [] })
+  unreadMessages: Message[];
 }

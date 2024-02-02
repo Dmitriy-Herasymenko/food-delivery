@@ -15,6 +15,8 @@ const users_model_1 = require("./users/users.model");
 const auth_module_1 = require("./auth/auth.module");
 const vote_module_1 = require("./vote/vote.module");
 const vote_model_1 = require("./vote/vote.model");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -23,6 +25,9 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 envFilePath: ".env",
+            }),
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'client'),
             }),
             sequelize_1.SequelizeModule.forRoot({
                 dialect: "postgres",
