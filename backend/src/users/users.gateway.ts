@@ -1,6 +1,6 @@
-// users.gateway.ts
-
-import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { SubscribeMessage, MessageBody, ConnectedSocket } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway()
@@ -9,15 +9,19 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
+    // Handle connection event
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
+    // Handle disconnection event
   }
 
   @SubscribeMessage('newMessage')
-  handleMessage(client: Socket, payload: any) {
-    this.server.emit('newMessage', payload);
+  handleMessage(@MessageBody() data: string, @ConnectedSocket() client: Socket) {
+    // Handle received message
+    this.server.emit('newMessage', data); // Broadcast the message to all connected clients
   }
+
+
+  
 }

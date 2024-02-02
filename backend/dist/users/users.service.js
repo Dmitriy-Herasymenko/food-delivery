@@ -31,7 +31,8 @@ let UsersService = class UsersService {
         return users;
     }
     async getUserById(id) {
-        return this.userRepository.findByPk(id);
+        const user = await this.userRepository.findByPk(id);
+        return user;
     }
     async getUserByEmail(email) {
         const user = await this.userRepository.findOne({
@@ -41,17 +42,12 @@ let UsersService = class UsersService {
         return user;
     }
     async findOne(userId) {
-        return this.userRepository.findOne({ where: { id: userId } });
+        const user = await this.userRepository.findOne({ where: { id: userId } });
+        return user;
     }
     async sendMessage(senderId, receiverId, content) {
-        const sender = await this.userRepository.findByPk(senderId);
-        if (!sender) {
-            throw new common_1.NotFoundException(`User with ID ${senderId} not found`);
-        }
-        const receiver = await this.userRepository.findByPk(receiverId);
-        if (!receiver) {
-            throw new common_1.NotFoundException(`Receiver with ID ${receiverId} not found`);
-        }
+        const sender = await this.findUserById(senderId);
+        const receiver = await this.findUserById(receiverId);
         const message = {
             text: content,
             username: sender.userName,
@@ -62,8 +58,18 @@ let UsersService = class UsersService {
         receiver.receivedMessages.push(message);
         await this.userRepository.update({ sentMessages: sender.sentMessages }, { where: { id: senderId } });
         await this.userRepository.update({ receivedMessages: receiver.receivedMessages }, { where: { id: receiverId } });
-        this.usersGateway.server.emit('newMessage', message);
+        this.usersGateway.server.to(receiverId).emit("newMessage", {
+            message,
+            unreadCount: receiver.unreadMessages.length,
+        });
         return sender;
+    }
+    async findUserById(userId) {
+        const user = await this.userRepository.findByPk(userId);
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${userId} not found`);
+        }
+        return user;
     }
 };
 exports.UsersService = UsersService;

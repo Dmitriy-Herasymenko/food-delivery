@@ -9,6 +9,7 @@ interface UserCreationAtrr {
     userName: string;
     sentMessages: string[];
     receivedMessages: string[];
+    unreadMessages: Message[];
 }
 export declare class User extends Model<User, UserCreationAtrr> {
     id: string;
@@ -17,5 +18,6 @@ export declare class User extends Model<User, UserCreationAtrr> {
     password: string;
     sentMessages: Message[];
     receivedMessages: Message[];
+    unreadMessages: Message[];
 }
 export {};

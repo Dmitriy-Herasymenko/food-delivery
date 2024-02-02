@@ -6,12 +6,18 @@ import { User } from "./users/users.model";
 import { AuthModule } from "./auth/auth.module";
 import { VotesModule } from "./vote/vote.module";
 import { Vote } from './vote/vote.model';
+import { UsersGateway } from './users/users.gateway';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
  
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ".env",
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
     }),
     SequelizeModule.forRoot({
       dialect: "postgres",
@@ -27,5 +33,6 @@ import { Vote } from './vote/vote.model';
     AuthModule,
     VotesModule
   ],
+
 })
 export class AppModule {}

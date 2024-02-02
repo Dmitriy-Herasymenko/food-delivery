@@ -29,14 +29,21 @@ let UsersController = class UsersController {
         return this.userService.getAllUsers();
     }
     async getUserById(id) {
-        const user = await this.userService.getUserById(id);
-        if (!user) {
+        try {
+            const user = await this.userService.getUserById(id);
+            return user;
+        }
+        catch (error) {
             throw new common_1.NotFoundException('User not found');
         }
-        return user;
     }
     sendMessage(data) {
-        return this.userService.sendMessage(data.senderId, data.receiverId, data.content);
+        try {
+            return this.userService.sendMessage(data.senderId, data.receiverId, data.content);
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
     }
 };
 exports.UsersController = UsersController;
@@ -47,7 +54,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "create", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Get All Users" }),
@@ -55,7 +62,7 @@ __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAll", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Get User by ID" }),
