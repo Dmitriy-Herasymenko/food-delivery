@@ -12,15 +12,23 @@ export class UsersController {
   @ApiOperation({ summary: "Create user" })
   @ApiResponse({ status: 200, type: User })
   @Post()
-  create(@Body() userDto: CreateUserDto): Promise<User> {
-    return this.userService.createUser(userDto);
+  async create(@Body() userDto: CreateUserDto): Promise<User> {
+    try {
+      return await this.userService.createUser(userDto);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @ApiOperation({ summary: "Get All Users" })
   @ApiResponse({ status: 200, type: [User] })
   @Get()
-  getAll(): Promise<User[]> {
-    return this.userService.getAllUsers();
+  async getAll(): Promise<User[]> {
+    try {
+      return await this.userService.getAllUsers();
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   @ApiOperation({ summary: "Get User by ID" })
@@ -28,8 +36,7 @@ export class UsersController {
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<User> {
     try {
-      const user = await this.userService.getUserById(id);
-      return user;
+      return await this.userService.getUserById(id);
     } catch (error) {
       throw new NotFoundException('User not found');
     }
@@ -38,9 +45,20 @@ export class UsersController {
   @ApiOperation({ summary: "Send Message to User" })
   @ApiResponse({ status: 200, type: User })
   @Post('send-message')
-  sendMessage(@Body() data: { senderId: string; receiverId: string; content: string }): Promise<User> {
+  async sendMessage(@Body() data: { senderId: string; receiverId: string; content: string }): Promise<any> {
     try {
       return this.userService.sendMessage(data.senderId, data.receiverId, data.content);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @ApiOperation({ summary: "Mark messages as read for a user" })
+  @ApiResponse({ status: 200, description: "Messages marked as read successfully" })
+  @Post('mark-messages-read')
+  async markMessagesAsRead(@Body() data: { userId: string }): Promise<void> {
+    try {
+      await this.userService.markMessagesAsRead(data.userId);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
