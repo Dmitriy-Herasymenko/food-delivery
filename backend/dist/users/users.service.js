@@ -34,6 +34,32 @@ let UsersService = class UsersService {
         const user = await this.userRepository.findByPk(id);
         return user;
     }
+    async getUnreadMessageCount(userId) {
+        try {
+            const user = await this.userRepository.findByPk(userId);
+            if (user) {
+                const unreadCount = user.unreadMessages.length;
+                return unreadCount;
+            }
+            return 0;
+        }
+        catch (error) {
+            throw new Error(`Error getting unread message count: ${error.message}`);
+        }
+    }
+    async getMessageHistory(userId) {
+        const user = await this.userRepository.findByPk(userId);
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${userId} not found`);
+        }
+        return user.sentMessages.map((sentMessage) => ({
+            message: {
+                text: sentMessage.text,
+                username: sentMessage.username,
+            },
+            unreadCount: 0,
+        }));
+    }
     async getUserByEmail(email) {
         const user = await this.userRepository.findOne({
             where: { email: email },
@@ -58,11 +84,42 @@ let UsersService = class UsersService {
         receiver.receivedMessages.push(message);
         await this.userRepository.update({ sentMessages: sender.sentMessages }, { where: { id: senderId } });
         await this.userRepository.update({ receivedMessages: receiver.receivedMessages }, { where: { id: receiverId } });
-        this.usersGateway.server.to(receiverId).emit("newMessage", {
-            message,
-            unreadCount: receiver.unreadMessages.length,
-        });
-        return sender;
+        const unreadCount = receiver.unreadMessages ? receiver.unreadMessages.length + 1 : 1;
+        if (unreadCount > 0) {
+            receiver.unreadMessages = receiver.unreadMessages || [];
+            receiver.unreadMessages.push(message);
+            await this.userRepository.update({ unreadMessages: receiver.unreadMessages }, { where: { id: receiverId } });
+            const data = {
+                message,
+                unreadCount,
+            };
+            this.usersGateway.server;
+        }
+        else {
+            this.usersGateway.server.to(senderId).emit("newMessage", {
+                message,
+                unreadCount: 0,
+            });
+        }
+    }
+    async markMessagesAsRead(userId) {
+        try {
+            const user = await this.userRepository.findByPk(userId);
+            if (user) {
+                user.unreadMessages = [];
+                await user.save();
+            }
+        }
+        catch (error) {
+            throw new Error(`Error marking messages as read: ${error.message}`);
+        }
+    }
+    async getUnreadMessages(userId) {
+        const user = await this.userRepository.findByPk(userId);
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${userId} not found`);
+        }
+        return user.unreadMessages;
     }
     async findUserById(userId) {
         const user = await this.userRepository.findByPk(userId);

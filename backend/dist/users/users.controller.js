@@ -22,24 +22,41 @@ let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
     }
-    create(userDto) {
-        return this.userService.createUser(userDto);
+    async create(userDto) {
+        try {
+            return await this.userService.createUser(userDto);
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
     }
-    getAll() {
-        return this.userService.getAllUsers();
+    async getAll() {
+        try {
+            return await this.userService.getAllUsers();
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
     }
     async getUserById(id) {
         try {
-            const user = await this.userService.getUserById(id);
-            return user;
+            return await this.userService.getUserById(id);
         }
         catch (error) {
             throw new common_1.NotFoundException('User not found');
         }
     }
-    sendMessage(data) {
+    async sendMessage(data) {
         try {
             return this.userService.sendMessage(data.senderId, data.receiverId, data.content);
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
+    }
+    async markMessagesAsRead(data) {
+        try {
+            await this.userService.markMessagesAsRead(data.userId);
         }
         catch (error) {
             throw new common_1.NotFoundException(error.message);
@@ -82,6 +99,15 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "sendMessage", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "Mark messages as read for a user" }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: "Messages marked as read successfully" }),
+    (0, common_1.Post)('mark-messages-read'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "markMessagesAsRead", null);
 exports.UsersController = UsersController = __decorate([
     (0, swagger_1.ApiTags)("Users"),
     (0, common_1.Controller)("users"),

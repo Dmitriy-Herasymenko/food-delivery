@@ -7,7 +7,7 @@ import { UsersGateway } from './users.gateway';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, UsersGateway],
+  providers: [UsersService, UsersGateway], 
   imports: [
     SequelizeModule.forFeature([User])
   ],
