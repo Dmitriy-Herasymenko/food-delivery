@@ -98,7 +98,7 @@ export class UsersService {
   
     // Отримуємо кількість непрочитаних повідомлень отримувача
     const unreadCount = receiver.unreadMessages ? receiver.unreadMessages.length + 1 : 1;
-  
+
     // Якщо є непрочитані повідомлення, оновлюємо їх та відсилаємо через веб-сокет
     if (unreadCount > 0) {
       receiver.unreadMessages = receiver.unreadMessages || [];
@@ -108,20 +108,28 @@ export class UsersService {
         { unreadMessages: receiver.unreadMessages },
         { where: { id: receiverId } }
       );
-   const data = {
-    message,
-    unreadCount,
-   }
-      this.usersGateway.server;
+      
+      // Відправляємо повідомлення та кількість непрочитаних повідомлень через веб-сокет
+      this.usersGateway.server.to(receiverId).emit('newMessage', {
+        message,
+        unreadCount,
+      });
+      this.usersGateway.server.to(receiverId).emit('unreadMessages', receiver.unreadMessages)
     } else {
       // Якщо немає непрочитаних повідомлень, відсилаємо тільки нове повідомлення
-      this.usersGateway.server.to(senderId).emit("newMessage", {
+      this.usersGateway.server.to(senderId).emit('newMessage', {
         message,
         unreadCount: 0,
       });
+      this.usersGateway.server.to(senderId).emit('unreadMessages', receiver.unreadMessages)
     }
-    
-}
+    // this.usersGateway.server.emit('messages', {receiverId, senderId})
+    this.usersGateway.server.to(senderId).emit('messages', message)
+    this.usersGateway.server.to(receiverId).emit('messages', message)
+    this.usersGateway.server.emit('messages', message)
+    this.usersGateway.server.emit('newMessage', message.receivedMessages)
+
+  }
 
 async markMessagesAsRead(userId: string): Promise<void> {
   try {

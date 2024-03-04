@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { LogIn, Registration, Voiting, NotFound } from "../pages";
+import { LogIn, Registration, Voiting, NotFound, MessagesPage } from "../pages";
 import { MainLayout } from "./MainLayout";
 
 export const routes = createBrowserRouter([
@@ -17,6 +17,10 @@ export const routes = createBrowserRouter([
       {
         path: "/registration",
         element: <Registration />,
+      },
+      {
+        path: "/messages",
+        element: <MessagesPage />,
       },
       {
         path: "/voiting",

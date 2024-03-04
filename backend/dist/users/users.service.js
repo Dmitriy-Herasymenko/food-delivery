@@ -89,18 +89,23 @@ let UsersService = class UsersService {
             receiver.unreadMessages = receiver.unreadMessages || [];
             receiver.unreadMessages.push(message);
             await this.userRepository.update({ unreadMessages: receiver.unreadMessages }, { where: { id: receiverId } });
-            const data = {
+            this.usersGateway.server.to(receiverId).emit('newMessage', {
                 message,
                 unreadCount,
-            };
-            this.usersGateway.server;
+            });
+            this.usersGateway.server.to(receiverId).emit('unreadMessages', receiver.unreadMessages);
         }
         else {
-            this.usersGateway.server.to(senderId).emit("newMessage", {
+            this.usersGateway.server.to(senderId).emit('newMessage', {
                 message,
                 unreadCount: 0,
             });
+            this.usersGateway.server.to(senderId).emit('unreadMessages', receiver.unreadMessages);
         }
+        this.usersGateway.server.to(senderId).emit('messages', message);
+        this.usersGateway.server.to(receiverId).emit('messages', message);
+        this.usersGateway.server.emit('messages', message);
+        this.usersGateway.server.emit('newMessage', message.receivedMessages);
     }
     async markMessagesAsRead(userId) {
         try {

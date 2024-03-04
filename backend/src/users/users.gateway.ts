@@ -18,19 +18,22 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleConnection(client: Socket) {
     const userId = client.handshake.query.userId as string;
 
-    const messages = await this.userRepository.findByPk(userId);
-  
-    client.emit('newMessage', messages.sentMessages);
-  
-    if (!this.connectedUsers.has(userId)) {
-      this.connectedUsers.set(userId, [client]);
-    } else {
-      this.connectedUsers.get(userId).push(client);
-    }
-    console.log("messageHistory",   this.messageHistory.get(userId))
+    const user = await this.userRepository.findByPk(userId);
+    client.emit('messages', user)
+    client.emit('newMessage', user.sentMessages);
+    client.emit('unreadMessages', user.unreadMessages);
+
+    // if (!this.connectedUsers.has(userId)) {
+    //   this.connectedUsers.set(userId, [client]);
+    // } else {
+    //   this.connectedUsers.get(userId).push(client);
+    // }
+
+    // client.on('unreadMessages', (data) => {
+    //   console.log(`Received message from client ${client.id}: ${data}`);
+    // });
   }
   
-
   handleDisconnect(client: Socket) {
     const userId = client.handshake.query.userId as string;
     console.log(`Client disconnected: ${client.id}, User ID: ${userId}`);
@@ -46,32 +49,30 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('newMessage')
-  async handleMessage(
-    @MessageBody() data: { message: any; unreadCount: number },
-    @ConnectedSocket() client: Socket,
-  ) {
-    const userId = client.handshake.query.userId as string;
+  // @SubscribeMessage('unreadMessages')
+  // async handleMessage(
+  //   @MessageBody() data: any,
+  //   @ConnectedSocket() client: Socket,
+  // ) {
+  //   console.log("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111", data)
+  // //   const userId = client.handshake.query.userId as string;
 
-    const messages = await this.userRepository.findByPk(userId);
-  console.log("data", data)
-    client.emit('newMessage', messages.sentMessages);
-    // Обновляем список непрочитанных сообщений для пользователя
-    // const unreadMessages = await this.usersService.getMessageHistory(userId);
-    
-    // // Зберігаем новое сообщение в истории
-    // if (!this.messageHistory.has(userId)) {
-    //   this.messageHistory.set(userId, unreadMessages);
-    // } else {
-    //   const history = this.messageHistory.get(userId);
-    //   history.push(data);
-    //   this.messageHistory.set(userId, history);
-    // }
+  // //   const user = await this.userRepository.findByPk(userId); 
+
+
+  // //   const messagesWithUnreadCount = user.unreadMessages.map(message => {
+  // //     return  {message: message,
+  // //     unreadCount: user.unreadMessages.length} 
+  // // });
+
+  // //   if (!this.messageHistory.has(userId)) {
+  // //     this.messageHistory.set(userId, messagesWithUnreadCount);
+  // //   } else {
+  // //     const history = this.messageHistory.get(userId);
+  // //     history.push(data);
+  // //     this.messageHistory.set(userId, history);
+  // //   }
   
-    // // Отправляем обновленный список непрочитанных сообщений пользователю
-    // client.emit('unreadMessages', unreadMessages);
-  }
-  
-  
-  
+  // //   client.emit('unreadMessages', messagesWithUnreadCount);
+  // }
 }
