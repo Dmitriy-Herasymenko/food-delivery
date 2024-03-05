@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { SentMessage } from "../../shared/api"
 import io from "socket.io-client";
 
 interface Message {
@@ -6,9 +7,16 @@ interface Message {
   username: string;
 }
 
+interface SentMessagesDataRequest {
+  senderId: string,
+  receiverId: string,
+  content: string
+}
+
 export const MessagesPage: React.FC = () => {
-  const [newMessages, setNewMessages] = useState<Message[]>([]);
-  const [unreadMessages, setUnreadMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [userName, setUserName] = useState<string>("");
+  const [newMessages, setNewMessages] = useState<string>("");
 
   useEffect(() => {
     const socket = io("ws://localhost:5000", {
@@ -19,17 +27,23 @@ export const MessagesPage: React.FC = () => {
       console.log(`Connected to WebSocket server`);
     });
 
+    socket.on("messages", (data: any) => {
+      console.log("data", data)
+      const { receivedMessages = [], sentMessages, unreadMessages } = data;
+      const combinedArrayMessages: Message[] = [...receivedMessages, ...sentMessages].sort(
+        (a: Message, b: Message) => new Date(a.createdAt) - new Date(b.createdAt)
+      );
+
+      setUserName(sentMessages[0].username);
+      setMessages(prevMessages => [...prevMessages, ...combinedArrayMessages]);
+      localStorage.setItem("unreadMessages", JSON.stringify(unreadMessages?.length));
+      console.log("messages", messages);
+    });
+
     socket.on("newMessage", (data: Message) => {
       console.log("Received new message:", data);
-      setNewMessages((prevMessages) => [...prevMessages, data]);
+      setMessages(prevMessages => [...prevMessages, data]);
     });
-
-    socket.on("unreadMessages", (data: Message) => {
-      console.log("Received unread message:", data);
-      setUnreadMessages((prevMessages) => [...prevMessages, data]);
-      localStorage.setItem("unreadMessages", JSON.stringify(data?.length));
-    });
-
     socket.on("disconnect", () => {
       console.log("Disconnected from WebSocket server");
     });
@@ -39,41 +53,49 @@ export const MessagesPage: React.FC = () => {
     };
   }, []);
 
+  const handleSentMessage = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data: SentMessagesDataRequest = {
+      receiverId: "ea310f42-86d9-41e6-b766-8c412b5a712f",
+      senderId: "69797a4c-f0aa-4859-985a-3309da6f159e",
+      content: newMessages
+    };
+
+    try {
+      await SentMessage(data);
+      setNewMessages("");
+    } catch (error) {
+      console.error("Error creating voting:", error);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 ">
       <div className="overflow-auto h-80 shadow-md p-10 ">
         <h2 className="text-lg font-semibold mb-2">Нові повідомлення</h2>
-        {newMessages[0]?.map((message, index) => (
-          <div
-            key={index}
-            className="bg-gray-100 rounded-md mb-2 p-5 w-3/4 border-[#000]"
-          >
-            <span className="font-semibold">{message.username}: </span>
-            <span>{message.text}</span>
-          </div>
-        ))}
-
-        {unreadMessages[0]?.map((message, index) => (
-          <div className="flex justify-end">
+        {messages?.map((message, index) => (
+          <div key={index} className={message.username === userName ? `flex justify-end` : ''}>
             <div
               key={index}
-              className="bottom-0 bg-gray-100 rounded-md mb-2 p-5 w-3/4 border-[#000]"
+              className="bg-gray-100 rounded-md mb-2 p-5 w-3/4 border-[#000]"
             >
               <span className="font-semibold">{message.username}: </span>
-              <span>{message.text}</span>
+              <span>{message?.text}</span>
             </div>
           </div>
         ))}
       </div>
 
-      <form className="mt-10 flex justify-center flex-col w-2/4 m-auto">
+      <form className="mt-10 flex justify-center flex-col w-2/4 m-auto"
+      onSubmit={handleSentMessage}
+      >
         <textarea
           type="text"
           placeholder="Введіть повідомлення..."
-          // value={inputText}
-          // onChange={handleChange}
+          value={newMessages}
+          onChange={ event => setNewMessages(event.target.value) }
+          
           className="border border-gray-300 rounded-md px-3 py-2 mr-2 bg-gray-100  text-left"
-
         />
         <button
           type="submit"

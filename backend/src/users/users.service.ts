@@ -79,6 +79,7 @@ export class UsersService {
     const message: any = {
       text: content,
       username: sender.userName,
+      createdAt: Date.now()
     };
   
     sender.sentMessages = sender.sentMessages || [];
@@ -126,8 +127,8 @@ export class UsersService {
     // this.usersGateway.server.emit('messages', {receiverId, senderId})
     this.usersGateway.server.to(senderId).emit('messages', message)
     this.usersGateway.server.to(receiverId).emit('messages', message)
-    this.usersGateway.server.emit('messages', message)
-    this.usersGateway.server.emit('newMessage', message.receivedMessages)
+
+    this.usersGateway.server.emit('newMessage', message)
 
   }
 
