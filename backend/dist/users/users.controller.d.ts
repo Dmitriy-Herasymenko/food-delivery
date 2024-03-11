@@ -14,5 +14,6 @@ export declare class UsersController {
     }): Promise<any>;
     markMessagesAsRead(data: {
         userId: string;
+        messageId: string;
     }): Promise<void>;
 }

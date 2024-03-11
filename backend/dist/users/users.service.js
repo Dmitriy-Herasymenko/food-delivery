@@ -77,7 +77,8 @@ let UsersService = class UsersService {
         const message = {
             text: content,
             username: sender.userName,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            userId: senderId,
         };
         sender.sentMessages = sender.sentMessages || [];
         sender.sentMessages.push(message);
@@ -107,11 +108,14 @@ let UsersService = class UsersService {
         this.usersGateway.server.to(receiverId).emit('messages', message);
         this.usersGateway.server.emit('newMessage', message);
     }
-    async markMessagesAsRead(userId) {
+    async markMessagesAsRead(userId, messageId) {
         try {
             const user = await this.userRepository.findByPk(userId);
             if (user) {
-                user.unreadMessages = [];
+                const unreadMessages = user.unreadMessages;
+                const updatedUnreadMessages = unreadMessages.filter((message) => message.userId !== messageId);
+                console.log("updatedUnreadMessages", updatedUnreadMessages);
+                user.unreadMessages = updatedUnreadMessages;
                 await user.save();
             }
         }

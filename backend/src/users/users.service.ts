@@ -79,7 +79,8 @@ export class UsersService {
     const message: any = {
       text: content,
       username: sender.userName,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      userId: senderId,
     };
   
     sender.sentMessages = sender.sentMessages || [];
@@ -132,17 +133,30 @@ export class UsersService {
 
   }
 
-async markMessagesAsRead(userId: string): Promise<void> {
-  try {
-    const user = await this.userRepository.findByPk(userId);
-    if (user) {
-      user.unreadMessages = [];
-      await user.save();
-    }
-  } catch (error) {
-    throw new Error(`Error marking messages as read: ${error.message}`);
+  
+  async markMessagesAsRead(userId: string, messageId: string): Promise<void> {
+    try {
+      const user = await this.userRepository.findByPk(userId);
+
+      if (user) {
+        // Находим пользователя и его непрочитанные сообщения
+        const unreadMessages = user.unreadMessages;
+        
+        // Удаляем сообщение из списка непрочитанных, если оно там есть
+        const updatedUnreadMessages = unreadMessages.filter((message:any) => message.userId !== messageId);
+        console.log("updatedUnreadMessages", updatedUnreadMessages)
+        // Обновляем список непрочитанных сообщений пользователя
+        user.unreadMessages = updatedUnreadMessages;
+        
+        // Сохраняем изменения
+        await user.save();
+      }
+    } catch (error) {
+      throw new Error(`Error marking messages as read: ${error.message}`);
+    } 
   }
-}
+  
+  
 
 async getUnreadMessages(userId: string): Promise<any[]> {
   const user = await this.userRepository.findByPk(userId);
@@ -150,8 +164,6 @@ async getUnreadMessages(userId: string): Promise<any[]> {
   if (!user) {
     throw new NotFoundException(`User with ID ${userId} not found`);
   }
-
-  // Вернуть непрочитанные сообщения пользователя
   return user.unreadMessages;
 }
 
