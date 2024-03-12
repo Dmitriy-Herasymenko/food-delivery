@@ -56,7 +56,7 @@ let UsersController = class UsersController {
     }
     async markMessagesAsRead(data) {
         try {
-            await this.userService.markMessagesAsRead(data.userId);
+            await this.userService.markMessagesAsRead(data.userId, data.messageId);
         }
         catch (error) {
             throw new common_1.NotFoundException(error.message);

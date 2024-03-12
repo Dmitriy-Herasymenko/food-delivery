@@ -77,6 +77,8 @@ let UsersService = class UsersService {
         const message = {
             text: content,
             username: sender.userName,
+            createdAt: Date.now(),
+            userId: senderId,
         };
         sender.sentMessages = sender.sentMessages || [];
         sender.sentMessages.push(message);
@@ -89,24 +91,31 @@ let UsersService = class UsersService {
             receiver.unreadMessages = receiver.unreadMessages || [];
             receiver.unreadMessages.push(message);
             await this.userRepository.update({ unreadMessages: receiver.unreadMessages }, { where: { id: receiverId } });
-            const data = {
+            this.usersGateway.server.to(receiverId).emit('newMessage', {
                 message,
                 unreadCount,
-            };
-            this.usersGateway.server;
+            });
+            this.usersGateway.server.to(receiverId).emit('unreadMessages', receiver.unreadMessages);
         }
         else {
-            this.usersGateway.server.to(senderId).emit("newMessage", {
+            this.usersGateway.server.to(senderId).emit('newMessage', {
                 message,
                 unreadCount: 0,
             });
+            this.usersGateway.server.to(senderId).emit('unreadMessages', receiver.unreadMessages);
         }
+        this.usersGateway.server.to(senderId).emit('messages', message);
+        this.usersGateway.server.to(receiverId).emit('messages', message);
+        this.usersGateway.server.emit('newMessage', message);
     }
-    async markMessagesAsRead(userId) {
+    async markMessagesAsRead(userId, messageId) {
         try {
             const user = await this.userRepository.findByPk(userId);
             if (user) {
-                user.unreadMessages = [];
+                const unreadMessages = user.unreadMessages;
+                const updatedUnreadMessages = unreadMessages.filter((message) => message.userId !== messageId);
+                console.log("updatedUnreadMessages", updatedUnreadMessages);
+                user.unreadMessages = updatedUnreadMessages;
                 await user.save();
             }
         }

@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WebSocket Example</title>
-  </head>
-  <body>
-    <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
-    <script>
-      const socket = io("ws://localhost:5000", {
-        query: { userId: "69797a4c-f0aa-4859-985a-3309da6f159e" },
-      });
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebSocket Example</title>
+</head>
+<body>
+  <div id="messagesContainer"></div> 
+  
+  <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
+  <script>
+    const socket = io("ws://localhost:5000", {
+      query: { userId: "69797a4c-f0aa-4859-985a-3309da6f159e" },
+    });
 
-      socket.on("connect", () => {
-        console.log(`Connected to WebSocket server`);
-      });
+    socket.on("connect", () => {
+      console.log(`Connected to WebSocket server`);
+    });
 
-      socket.on("newMessage", (data) => {
-        console.log("Received new message:", data);
-      });
+    socket.on("messages", (data) => {
+      console.log("messages:", data);
+    });
+    socket.on("unreadMessages", (data) => {
+      console.log("unreadMessages:", data);
+    });
+    socket.on("newMessage", (data) => {
+      console.log("newMessage:", data);
+    });
 
-      socket.on("disconnect", () => {
-        console.log("Disconnected from WebSocket server");
-      });
-    </script>
-  </body>
+    socket.on("disconnect", () => {
+      console.log("Disconnected from WebSocket server");
+    });
+  </script>
+</body>
 </html>

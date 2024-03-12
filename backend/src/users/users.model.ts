@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 interface Message {
   message: string;
   userName: string;
+  messageId: string;
 }
 interface UserCreationAtrr {
   email: string;

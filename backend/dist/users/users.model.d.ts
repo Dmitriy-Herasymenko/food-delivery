@@ -2,6 +2,7 @@ import { Model } from "sequelize-typescript";
 interface Message {
     message: string;
     userName: string;
+    messageId: string;
 }
 interface UserCreationAtrr {
     email: string;

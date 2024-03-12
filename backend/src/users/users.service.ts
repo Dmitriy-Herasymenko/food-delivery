@@ -79,6 +79,8 @@ export class UsersService {
     const message: any = {
       text: content,
       username: sender.userName,
+      createdAt: Date.now(),
+      userId: senderId,
     };
   
     sender.sentMessages = sender.sentMessages || [];
@@ -98,7 +100,7 @@ export class UsersService {
   
     // Отримуємо кількість непрочитаних повідомлень отримувача
     const unreadCount = receiver.unreadMessages ? receiver.unreadMessages.length + 1 : 1;
-  
+
     // Якщо є непрочитані повідомлення, оновлюємо їх та відсилаємо через веб-сокет
     if (unreadCount > 0) {
       receiver.unreadMessages = receiver.unreadMessages || [];
@@ -108,32 +110,53 @@ export class UsersService {
         { unreadMessages: receiver.unreadMessages },
         { where: { id: receiverId } }
       );
-   const data = {
-    message,
-    unreadCount,
-   }
-      this.usersGateway.server;
+      
+      // Відправляємо повідомлення та кількість непрочитаних повідомлень через веб-сокет
+      this.usersGateway.server.to(receiverId).emit('newMessage', {
+        message,
+        unreadCount,
+      });
+      this.usersGateway.server.to(receiverId).emit('unreadMessages', receiver.unreadMessages)
     } else {
       // Якщо немає непрочитаних повідомлень, відсилаємо тільки нове повідомлення
-      this.usersGateway.server.to(senderId).emit("newMessage", {
+      this.usersGateway.server.to(senderId).emit('newMessage', {
         message,
         unreadCount: 0,
       });
+      this.usersGateway.server.to(senderId).emit('unreadMessages', receiver.unreadMessages)
     }
-    
-}
+    // this.usersGateway.server.emit('messages', {receiverId, senderId})
+    this.usersGateway.server.to(senderId).emit('messages', message)
+    this.usersGateway.server.to(receiverId).emit('messages', message)
 
-async markMessagesAsRead(userId: string): Promise<void> {
-  try {
-    const user = await this.userRepository.findByPk(userId);
-    if (user) {
-      user.unreadMessages = [];
-      await user.save();
-    }
-  } catch (error) {
-    throw new Error(`Error marking messages as read: ${error.message}`);
+    this.usersGateway.server.emit('newMessage', message)
+
   }
-}
+
+  
+  async markMessagesAsRead(userId: string, messageId: string): Promise<void> {
+    try {
+      const user = await this.userRepository.findByPk(userId);
+
+      if (user) {
+        // Находим пользователя и его непрочитанные сообщения
+        const unreadMessages = user.unreadMessages;
+        
+        // Удаляем сообщение из списка непрочитанных, если оно там есть
+        const updatedUnreadMessages = unreadMessages.filter((message:any) => message.userId !== messageId);
+        console.log("updatedUnreadMessages", updatedUnreadMessages)
+        // Обновляем список непрочитанных сообщений пользователя
+        user.unreadMessages = updatedUnreadMessages;
+        
+        // Сохраняем изменения
+        await user.save();
+      }
+    } catch (error) {
+      throw new Error(`Error marking messages as read: ${error.message}`);
+    } 
+  }
+  
+  
 
 async getUnreadMessages(userId: string): Promise<any[]> {
   const user = await this.userRepository.findByPk(userId);
@@ -141,8 +164,6 @@ async getUnreadMessages(userId: string): Promise<any[]> {
   if (!user) {
     throw new NotFoundException(`User with ID ${userId} not found`);
   }
-
-  // Вернуть непрочитанные сообщения пользователя
   return user.unreadMessages;
 }
 

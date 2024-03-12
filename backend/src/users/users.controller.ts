@@ -56,9 +56,9 @@ export class UsersController {
   @ApiOperation({ summary: "Mark messages as read for a user" })
   @ApiResponse({ status: 200, description: "Messages marked as read successfully" })
   @Post('mark-messages-read')
-  async markMessagesAsRead(@Body() data: { userId: string }): Promise<void> {
+  async markMessagesAsRead(@Body() data: { userId: string, messageId:string }): Promise<void> {
     try {
-      await this.userService.markMessagesAsRead(data.userId);
+      await this.userService.markMessagesAsRead(data.userId, data.messageId);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
