@@ -92,16 +92,14 @@ export class UsersService {
     await this.userRepository.update(
       { sentMessages: sender.sentMessages },
       { where: { id: senderId } }
-    );
+    );r
     await this.userRepository.update(
       { receivedMessages: receiver.receivedMessages },
       { where: { id: receiverId } }
     );
   
-    // Отримуємо кількість непрочитаних повідомлень отримувача
     const unreadCount = receiver.unreadMessages ? receiver.unreadMessages.length + 1 : 1;
 
-    // Якщо є непрочитані повідомлення, оновлюємо їх та відсилаємо через веб-сокет
     if (unreadCount > 0) {
       receiver.unreadMessages = receiver.unreadMessages || [];
       receiver.unreadMessages.push(message);
@@ -118,8 +116,7 @@ export class UsersService {
       });
       this.usersGateway.server.to(receiverId).emit('unreadMessages', receiver.unreadMessages)
     } else {
-      // Якщо немає непрочитаних повідомлень, відсилаємо тільки нове повідомлення
-      this.usersGateway.server.to(senderId).emit('newMessage', {
+      this.usersGateway.server.to(senderId).emit('newMessage',{
         message,
         unreadCount: 0,
       });

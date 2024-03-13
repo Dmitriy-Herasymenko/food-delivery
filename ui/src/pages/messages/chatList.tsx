@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Notification } from "../../components";
 import { MarkMessageAsRead } from "../../shared/api";
+import {setNotification} from "../../store/reducers/messages/action"
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import io from "socket.io-client";
 
 interface Message {
@@ -26,72 +29,77 @@ interface SentMessagesDataRequest {
 const USER_ID = "69797a4c-f0aa-4859-985a-3309da6f159e";
 
 export const ChatListPage: React.FC = () => {
-  const [chatList, setChatList] = useState<Chat[]>([]);
-  const [showNotification, setShowNotification] = useState<boolean>(false);
-  const [notificationMessage, setNotificationMessage] = useState<string>("");
-  const [notificationUsername, setNotificationUsername] = useState<string>("");
+  const dispatch = useDispatch();
+  //const [chatList, setChatList] = useState<Chat[]>([]);
+  // const [showNotification, setShowNotification] = useState<boolean>(false);
+  // const [notificationMessage, setNotificationMessage] = useState<string>("");
+  // const [notificationUsername, setNotificationUsername] = useState<string>("");
+  const { chatListMessages, showNotification, notificationMessage, notificationUsername } = useSelector((state) => state?.messagesReducer);
 
-  useEffect(() => {
-    const socket = io("ws://localhost:5000", {
-      query: { userId: USER_ID },
-    });
+console.log("showNotification", showNotification)
 
-    socket.on("connect", () => {
-      console.log("WebSocket connected");
-    });
+  // useEffect(() => {
+  //   const socket = io("ws://localhost:5000", {
+  //     query: { userId: USER_ID },
+  //   });
 
-    socket.on("messages", (data: any) => {
-      setChatList(() => {
-        const newChatList = data?.receivedMessages?.reduce(
-          (acc: Chat[], message: Message) => {
-            const existingChatIndex = acc.findIndex(
-              (chat) => chat.userId === message.userId
-            );
-            if (existingChatIndex !== -1) {
-              acc[existingChatIndex] = {
-                ...acc[existingChatIndex],
-                lastMessage: message.text,
-              };
-            } else {
-              const unread =
-  data?.unreadMessages?.length === 0 ||
-  !data.unreadMessages.some((msg: any) => msg.userId === message.userId);
+  //   socket.on("connect", () => {
+  //     console.log("WebSocket connected");
+  //   });
 
-                   
-              acc.push({
-                username: message.username,
-                lastMessage: message.text,
-                userId: message.userId,
-                avatarUrl: `https://via.placeholder.com/50?text=${message.username[0]}`,
-                unread: unread,
-              });
-            }
-            return acc;
-          },
-          []
-        );
-        return newChatList;
-      });
-    });
+  //   socket.on("messages", (data: any) => {
+  //     setChatList(() => {
+  //       const newChatList = data?.receivedMessages?.reduce(
+  //         (acc: Chat[], message: Message) => {
+  //           const existingChatIndex = acc.findIndex(
+  //             (chat) => chat.userId === message.userId
+  //           );
+  //           if (existingChatIndex !== -1) {
+  //             acc[existingChatIndex] = {
+  //               ...acc[existingChatIndex],
+  //               lastMessage: message.text,
+  //             };
+  //           } else {
+  //             const unread =
+  //               data?.unreadMessages?.length === 0 ||
+  //               !data.unreadMessages.some(
+  //                 (msg: any) => msg.userId === message.userId
+  //               );
 
-    socket.on("newMessage", (data: Message) => {
-      setChatList((prevChatList) =>
-        prevChatList.map((chat) => ({
-          ...chat,
-          lastMessage:
-            chat.userId === data.userId ? data.text : chat.lastMessage,
-          unread: chat.userId === data.userId,
-        }))
-      );
-      setNotificationMessage(data.text);
-      setNotificationUsername(data.username);
-      setShowNotification(true);
-    });
+  //             acc.push({
+  //               username: message.username,
+  //               lastMessage: message.text,
+  //               userId: message.userId,
+  //               avatarUrl: `https://via.placeholder.com/50?text=${message.username[0]}`,
+  //               unread: unread,
+  //             });
+  //           }
+  //           return acc;
+  //         },
+  //         []
+  //       );
+  //       return newChatList;
+  //     });
+  //   });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  //   socket.on("newMessage", (data: Message) => {
+  //     setChatList((prevChatList) =>
+  //       prevChatList.map((chat) => ({
+  //         ...chat,
+  //         lastMessage:
+  //           chat.userId === data.userId ? data.text : chat.lastMessage,
+  //         unread: chat.userId === data.userId,
+  //       }))
+  //     );
+  //     setNotificationMessage(data.text);
+  //     setNotificationUsername(data.username);
+  //     setShowNotification(true);
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   async function markMessageAsRead(
     userId: string,
@@ -108,13 +116,13 @@ export const ChatListPage: React.FC = () => {
       console.error("Error:", error);
     }
   }
+  // console.log("chatList", chatListMessages)
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">Список чатов</h1>
       <ul className="divide-y divide-gray-200">
-        {chatList.map((chat: Chat, index: number) => {
-          console.log("chat", chat);
+        {chatListMessages.map((chat: Chat, index: number) => {
           return (
             <li
               key={index}
@@ -147,7 +155,7 @@ export const ChatListPage: React.FC = () => {
         <Notification
           username={notificationUsername}
           message={notificationMessage}
-          onClose={() => setShowNotification(false)}
+          onClose={() => dispatch(setNotification(!showNotification))}
         />
       )}
     </div>
