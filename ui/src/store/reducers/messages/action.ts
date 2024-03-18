@@ -1,24 +1,29 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import io from "socket.io-client";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import io from 'socket.io-client';
 
-const USER_ID = "69797a4c-f0aa-4859-985a-3309da6f159e";
+const USER_ID = localStorage.getItem('userId');
 
-export const messagesAction = createAsyncThunk<any, void, { rejectValue: string }>(
-  "messages/subscribeToWebSocket",
-  async (_, { rejectWithValue }) => {
-    return new Promise<any>((resolve, reject) => {
-      const socket = io("ws://localhost:5000", {
-        query: { userId: USER_ID },
-      });
+export const messagesAction = createAsyncThunk<
+  any,
+  void,
+  { rejectValue: string }
+>('messages/subscribeToWebSocket', async (_, thunkAPI) => {
+  return new Promise<any>((resolve, reject) => {
+    const socket = io('ws://localhost:5000', {
+      query: { userId: USER_ID },
+    });
 
-      socket.on("connect", () => {
-        console.log("WebSocket connected");
-      });
+    socket.on('connect', () => {
+      console.log('WebSocket connected');
+    });
 
-      // Постійно слідкуємо за новими повідомленнями
-      socket.on("messages", (data: any) => {
-        // Обробка отриманих повідомлень
-        const newChatList = data?.receivedMessages?.reduce(
+    socket.on('messages', (data: any) => {
+      if (data && data.receivedMessages) {
+        const { receivedMessages = [], sentMessages, unreadMessages } = data;
+        const chatUserId = localStorage.getItem('chatUserId');
+        const userId = data?.id;
+
+        const newChatList = receivedMessages?.reduce(
           (acc: any, message: any) => {
             const existingChatIndex = acc.findIndex(
               (chat: any) => chat.userId === message.userId
@@ -48,39 +53,61 @@ export const messagesAction = createAsyncThunk<any, void, { rejectValue: string 
           },
           []
         );
-        resolve(newChatList);
-      });
 
-
-      socket.on("error", (error: any) => {
-        rejectWithValue(error);
-      });
+        const combinedArrayMessages: any[] = [
+          ...receivedMessages,
+          ...sentMessages,
+        ]
+          .sort(
+            (a: any, b: any) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          )
+          .filter(
+            (message) =>
+              message?.userId === chatUserId || message?.userId === userId
+          );
+        resolve({
+          chatList: newChatList,
+          messages: combinedArrayMessages,
+          unreadMessages: unreadMessages.length,
+          userId: data?.id,
+        });
+      }
     });
-  }
-);
 
-export const notificationAction = createAsyncThunk<any, any, { rejectValue: string}> (
-  "messages/newMessages",
-  async (data, thunkAPI) => {
-    try {
-      return { showNotification: true, notificationMessage: data.text, notificationUsername: data.username };
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Помилка отримання даних");
-    }
-  }
-)
+    socket.on('error', (error: any) => {
+      rejectWithValue(error);
+    });
+  });
+});
 
-export const setNotification = createAsyncThunk<any, any, { rejectValue: string}> (
-  "messages/setNotification",
-  async (isOpen, thunkAPI) => {
-    try {
-      return isOpen;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("Помилка отримання даних");
-    }
+export const notificationAction = createAsyncThunk<
+  any,
+  any,
+  { rejectValue: string }
+>('messages/newMessages', async (data, thunkAPI) => {
+  try {
+    return {
+      showNotification: true,
+      notificationMessage: data.text,
+      notificationUsername: data.username,
+    };
+  } catch (error) {
+    return thunkAPI.rejectWithValue('Помилка отримання даних');
   }
-)
+});
 
+export const setNotification = createAsyncThunk<
+  any,
+  any,
+  { rejectValue: string }
+>('messages/setNotification', async (isOpen, thunkAPI) => {
+  try {
+    return isOpen;
+  } catch (error) {
+    return thunkAPI.rejectWithValue('Помилка отримання даних');
+  }
+});
 
 export const unsubscribeFromWebSocket = (socket: any) => {
   socket.disconnect();

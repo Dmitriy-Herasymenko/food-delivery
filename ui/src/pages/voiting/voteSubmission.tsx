@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { styles } from "./styles";
+import { useState } from 'react';
+import { styles } from './styles';
 
 interface options {
   description: string;
@@ -19,7 +19,7 @@ export const VoteSubmission: React.FC<VoteSubmissionProps> = ({
   options,
   onSubmit,
 }) => {
-  const [idVote, setIdVote] = useState<string>("");
+  const [idVote, setIdVote] = useState<string>('');
 
   const handleOptionChange = (optionId: string) => setIdVote(optionId);
 
@@ -31,14 +31,14 @@ export const VoteSubmission: React.FC<VoteSubmissionProps> = ({
   return (
     <div className={styles.voteSubmission.container}>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="options" className={styles.voteSubmission.label}>
+        <label htmlFor='options' className={styles.voteSubmission.label}>
           {titleVote}
         </label>
         {options.map((option, index) => (
           <div key={index} className={styles.voteSubmission.option}>
             <input
-              type="radio"
-              name="options"
+              type='radio'
+              name='options'
               className={styles.voteSubmission.radio}
               value={option.id}
               checked={idVote === option.id}
@@ -48,7 +48,7 @@ export const VoteSubmission: React.FC<VoteSubmissionProps> = ({
           </div>
         ))}
 
-        <button type="submit" className={styles.voteSubmission.buttonSubmit}>
+        <button type='submit' className={styles.voteSubmission.buttonSubmit}>
           Відправити голос
         </button>
       </form>

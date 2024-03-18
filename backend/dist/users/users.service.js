@@ -85,7 +85,6 @@ let UsersService = class UsersService {
         receiver.receivedMessages = receiver.receivedMessages || [];
         receiver.receivedMessages.push(message);
         await this.userRepository.update({ sentMessages: sender.sentMessages }, { where: { id: senderId } });
-        r;
         await this.userRepository.update({ receivedMessages: receiver.receivedMessages }, { where: { id: receiverId } });
         const unreadCount = receiver.unreadMessages ? receiver.unreadMessages.length + 1 : 1;
         if (unreadCount > 0) {

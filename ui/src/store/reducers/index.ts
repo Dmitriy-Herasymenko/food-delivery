@@ -1,10 +1,10 @@
-import {combineReducers} from "redux";
-import usersReducer from "./users/reducers";
-import messagesReducer from "./messages/reducers";
+import {combineReducers} from 'redux';
+import messagesReducer from './messages/reducers';
+import userReducer from './user/reducers';
 
 export const rootReducer = combineReducers({
-    usersReducer,
-    messagesReducer
+    messagesReducer,
+    userReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>

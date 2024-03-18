@@ -1,5 +1,5 @@
-import axios from "axios";
-import { config } from "./config";
+import axios from 'axios';
+import { config } from './config';
 
 export const api = axios.create({
   baseURL: config.baseUrl,
@@ -12,12 +12,12 @@ export const api = axios.create({
 
 // api.interceptors.request.use(
 //   (config) => {
-//     const token = localStorage.getItem("token");
+//     const token = localStorage.getItem('token');
 
 //     if (token) {
-//       config.headers["Authorization"] = `Bearer ${token}`;
+//       config.headers['Authorization'] = `Bearer ${token}`;
 //     } else {
-//       window.location.href = "/login";
+//       window.location.href = '/login';
 //     }
 
 //     return config;
@@ -31,10 +31,10 @@ api.interceptors.response.use(
   (response) => {
     if (response.data && response.data.token) {
       const {token, userId, email, userName} = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId);
-      localStorage.setItem("email", email);
-      localStorage.setItem("userName", userName);
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('email', email);
+      localStorage.setItem('userName', userName);
     }
     return response;
   },
@@ -63,7 +63,7 @@ api.interceptors.response.use(
 //   },
 //   (err) => {
 //     if (401 === err.response.status) {
-//       window.location.href = "/login";
+//       window.location.href = '/login';
 //     } else {
 //       throw new Error(err.response?.data?.title || 'Something went wrong');
 //     }

@@ -1,35 +1,51 @@
-import { useEffect } from "react";
-import { RouterProvider } from "react-router-dom"; 
-import { routes } from "./app/routes";
-import { useDispatch } from "react-redux";
-import { messagesAction, notificationAction } from "./store/reducers/messages/action";
-import io from "socket.io-client";
+import { useEffect } from 'react';
+import { RouterProvider } from 'react-router-dom';
+import { routes, routesNonToken } from './app/routes';
+import { useDispatch } from 'react-redux';
+import {
+  messagesAction,
+  notificationAction,
+} from './store/reducers/messages/action';
+import { Notification } from './components';
+import { useSelector } from 'react-redux';
+import { setNotification } from './store/reducers/messages/action';
+import io from 'socket.io-client';
 
-
-export const App = () => { 
-
+export const App = () => {
   const dispatch = useDispatch();
 
+  const { showNotification, notificationMessage, notificationUsername, userId } = useSelector((state) => state?.messagesReducer);
+  const token = localStorage.getItem('token');
+
+  
   useEffect(() => {
-    const socket = io("ws://localhost:5000", {
-      query: { userId: "69797a4c-f0aa-4859-985a-3309da6f159e" },
+    const socket = io('ws://localhost:5000', {
+      query: { userId: 'adfe09a4-2b5b-4370-be9d-51137b8de754' },
     });
-    
-    socket.on("messages", (data: any) => {
-      // Викликаємо екшен messagesAction лише при отриманні нового повідомлення
+
+    socket.on('messages', (data: any) => {
       dispatch(messagesAction());
     });
-    socket.on("newMessage", (data: any) => {
-      // Викликаємо екшен messagesAction лише при отриманні нового повідомлення
+    socket.on('newMessage', (data: any) => {
       dispatch(notificationAction(data));
       dispatch(messagesAction());
     });
 
     return () => {
-      // Відключаємо підписку на подію "newMessage" при розмонтуванні компонента
-      socket.off("newMessage");
+      socket.off('newMessage');
     };
   }, [dispatch]);
 
-  return <RouterProvider router={routes} />
+  return (
+    <>
+      {token ? <RouterProvider router={routes} /> : <RouterProvider router={routesNonToken}  /> }
+      {showNotification && (
+        <Notification
+          username={notificationUsername}
+          message={notificationMessage}
+          onClose={() => dispatch(setNotification(!showNotification))}
+        />
+      )}
+    </>
+  );
 };

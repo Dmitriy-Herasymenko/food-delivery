@@ -4,7 +4,8 @@ import {
   MdOutlineLogout,
 } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
-import { BiMessageSquareDots, BiMessage } from "react-icons/bi";
+import { BiMessageSquareDots } from "react-icons/bi";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
@@ -14,7 +15,8 @@ interface SidebarProps {
 
 export const SideNavbar: React.FC<SidebarProps>  = ({ className }) => {
   const navigate = useNavigate();
- const unreadMessages = localStorage.getItem("unreadMessages");
+  const { unreadMessages } = useSelector((state) => state?.messagesReducer);
+
   return (
     <div className={`your-existing-styles ${className}`}>
         <div className="p-6 w-1/2 h-screen bg-[#4F46E5] z-20 fixed top-0 -left-96 lg:left-0 lg:w-60  peer-focus:left-0 peer:transition ease-out delay-150 duration-200">
@@ -41,7 +43,7 @@ export const SideNavbar: React.FC<SidebarProps>  = ({ className }) => {
                 <h3 className="text-base text-white group-hover:text-white font-semibold ">
                   Messages
                 </h3>
-                <span> + {unreadMessages}</span>
+                <span>{unreadMessages > 0 ? `+ ${unreadMessages}` : ""}</span>
               </div>
 
               <div className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-[#4338CA] p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto" onClick={() => navigate("/dashboard")}>

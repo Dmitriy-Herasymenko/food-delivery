@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import {
 MdAdd,
 MdRemove
-} from "react-icons/md";
+} from 'react-icons/md';
 import { styles } from './styles';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -48,79 +48,79 @@ export const VotingForm: React.FC<VotingFormProps> = ({setCreatingVoting, creati
     <div className={styles.votingForm.container}>
       <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="first-name" className="block text-sm font-semibold leading-6 text-gray-900">
+            <label htmlFor='first-name' className='block text-sm font-semibold leading-6 text-gray-900'>
             Назва голосування
             </label>
-            <div className="mt-2.5">
+            <div className='mt-2.5'>
               <input
-                type="text"
-                name="first-name"
-                id="first-name"
+                type='text'
+                name='first-name'
+                id='first-name'
                 onChange={(e) => setTitle(e.target.value)}
-                className="block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className='block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
           </div>
 
-        <div className="mt-2.5">
-          <label htmlFor="startDate" className="block text-sm font-semibold leading-6 text-gray-900">
+        <div className='mt-2.5'>
+          <label htmlFor='startDate' className='block text-sm font-semibold leading-6 text-gray-900'>
             Початок голосування
           </label>
-          <div className="mt-2.5">
+          <div className='mt-2.5'>
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             showTimeSelect
-            className="block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            dateFormat="Pp"
+            className='block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+            dateFormat='Pp'
           />
           </div>
         </div>
 
-        <div className="mt-2.5">
-          <label htmlFor="endDate" className="block text-sm font-semibold leading-6 text-gray-900">
+        <div className='mt-2.5'>
+          <label htmlFor='endDate' className='block text-sm font-semibold leading-6 text-gray-900'>
             Закінчення голосування
           </label>
-          <div className="mt-2.5">
+          <div className='mt-2.5'>
           <DatePicker
             selected={endDate}
             onChange={(date) => setEndDate(date)}
             showTimeSelect
-            className="block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            dateFormat="Pp"
+            className='block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+            dateFormat='Pp'
           />
           </div>
         </div>
 
 
-        <div className="mt-2.5">
-          <label htmlFor="options" className="block text-sm font-medium text-gray-600">
+        <div className='mt-2.5'>
+          <label htmlFor='options' className='block text-sm font-medium text-gray-600'>
             Опції
           </label>
-          <div className="flex flex-col space-y-2  p-1">
+          <div className='flex flex-col space-y-2  p-1'>
             {creatingVoting?.options.map((option, index) => (
-              <div key={index} className="flex items-center justify-between space-x-2 block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <div key={index} className='flex items-center justify-between space-x-2 block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'>
                 <span>{option.description}</span>
                 <MdRemove onClick={() => handleRemoveOption(index)} className='text-2xl text-red-500 ml-2.5 group-hover:text-white cursor-pointer'/>
               </div>
             ))}
           </div>
-          <div className="mt-2.5 flex items-center">
+          <div className='mt-2.5 flex items-center'>
             <input
-              type="text"
-              id="newOption"
-              name="newOption"
+              type='text'
+              id='newOption'
+              name='newOption'
               value={newOption.option}
               onChange={(e) => setNewOption({ ...newOption, option: e.target.value, description: e.target.value })}
-              className="block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className='block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
             />
             <MdAdd onClick={handleAddOption} className='text-2xl text-[#4F46E5] ml-2.5 group-hover:text-white cursor-pointer' />
           </div>
         </div>
 
         <button
-          type="submit"
-          className="mt-2.5 bg-[#4F46E5] text-white p-2 rounded-md mb-4"
+          type='submit'
+          className='mt-2.5 bg-[#4F46E5] text-white p-2 rounded-md mb-4'
         >
           Створити голосування
         </button>

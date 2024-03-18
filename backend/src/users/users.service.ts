@@ -92,7 +92,7 @@ export class UsersService {
     await this.userRepository.update(
       { sentMessages: sender.sentMessages },
       { where: { id: senderId } }
-    );r
+    );
     await this.userRepository.update(
       { receivedMessages: receiver.receivedMessages },
       { where: { id: receiverId } }

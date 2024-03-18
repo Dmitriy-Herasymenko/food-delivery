@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { classNames } from "./styles";
-import { RegistrationApi } from "../../../shared/api";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { classNames } from './styles';
+import { RegistrationApi } from '../../../shared/api';
+import { useNavigate } from 'react-router-dom';
 
 
 export const Registration = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
   const navigate = useNavigate();
 
   const LoginRequest = async () => {
@@ -19,7 +19,7 @@ export const Registration = () => {
 
     const response = await RegistrationApi(data);
     if(response) {
-      navigate("/voiting");
+      navigate('/voiting');
     }
   };
 
@@ -27,14 +27,14 @@ export const Registration = () => {
     <div className={classNames.container}>
       <div className={classNames.formContainer}>
         <h1 className={classNames.heading}>Registration</h1>
-        <form className="space-y-4">
+        <form className='space-y-4'>
           <div>
             <label className={classNames.label}>
               <span className={classNames.labelText}>Email</span>
             </label>
             <input
-              type="text"
-              placeholder="Email Address"
+              type='text'
+              placeholder='Email Address'
               className={classNames.input}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -44,8 +44,8 @@ export const Registration = () => {
               <span className={classNames.labelText}>User Name</span>
             </label>
             <input
-              type="text"
-              placeholder="User Name"
+              type='text'
+              placeholder='User Name'
               className={classNames.input}
               onChange={(e) => setUserName(e.target.value)}
             />
@@ -55,8 +55,8 @@ export const Registration = () => {
               <span className={classNames.labelText}>Password</span>
             </label>
             <input
-              type="password"
-              placeholder="Enter Password"
+              type='password'
+              placeholder='Enter Password'
               className={classNames.input}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -66,7 +66,7 @@ export const Registration = () => {
           </a>
           <div>
             <button
-              type="button"
+              type='button'
               className={classNames.button}
               onClick={LoginRequest}
             >

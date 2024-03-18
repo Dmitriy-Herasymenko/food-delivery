@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
-import { VoteOption, GetVoting, CreateVoting } from "../../shared/api";
-import { VotingForm, VoteSubmission, VotingStatus } from "./";
+import { useState, useEffect } from 'react';
+import { VoteOption, GetVoting, CreateVoting } from '../../shared/api';
+import { VotingForm, VoteSubmission, VotingStatus } from './';
 import { Voting, HandleCreateVoting, CreatingVoting, CreateVote } from './types';
 import { styles } from './styles';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 
 const VOITING_OBJ = {
-  title: "",
+  title: '',
   startDate: new Date(),
   endDate: new Date(),
   options: [],
 }
 
 export const Voiting = () => {
-  const [userId] = useState<string>(localStorage.getItem("userId") || "");
-  const [idVote, setIdVote] = useState<string>("");
-  const [titleVote, setTitleVote] = useState<string>("");
+  const [userId] = useState<string>(localStorage.getItem('userId') || '');
+  const [idVote, setIdVote] = useState<string>('');
+  const [titleVote, setTitleVote] = useState<string>('');
   const [isVote, setIsVote] = useState<boolean>(true);
   const [isOpenVote, setIsOpenVote] = useState<boolean>(false);
   const [isCreateVoted, setIsCreatedVoted] = useState<boolean>(false);
@@ -45,7 +45,7 @@ export const Voiting = () => {
         }
       }
     } catch (error) {
-      console.error("Error fetching voting data:", error);
+      console.error('Error fetching voting data:', error);
     }
   };
 
@@ -75,9 +75,9 @@ export const Voiting = () => {
 
     try {
       const response = await CreateVoting(data);
-      console.log("response", response);
+      console.log('response', response);
     } catch (error) {
-      console.error("Error creating voting:", error);
+      console.error('Error creating voting:', error);
     }
   };
 
@@ -92,7 +92,7 @@ export const Voiting = () => {
       await VoteOption(data);
       await requestVoting();
     } catch (error) {
-      console.error("Error submitting vote:", error);
+      console.error('Error submitting vote:', error);
     }
   };
 
@@ -105,7 +105,7 @@ export const Voiting = () => {
       {!isCreateVoted && isVote && (
                <div className={styles.createButtonWrapper}>
                <a
-                 href="#"
+                 href='#'
                  onClick={handleCreateVote}
                  className={styles.createButton}
                >

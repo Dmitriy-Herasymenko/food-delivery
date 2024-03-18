@@ -1,4 +1,4 @@
-import { styles } from "./styles";
+import { styles } from './styles';
 
 interface VotingStatusProps {
   votingStatus: boolean;
@@ -29,7 +29,7 @@ export const VotingStatus: React.FC<VotingStatusProps> = ({
             {/* Тут можна додати прогрес-бар для відображення результатів голосування */}
           </div>
 
-          <button type="submit" className={styles.votingStatus.buttonSubmit}>
+          <button type='submit' className={styles.votingStatus.buttonSubmit}>
             Відправити голосування
           </button>
         </form>
@@ -41,10 +41,10 @@ export const VotingStatus: React.FC<VotingStatusProps> = ({
           <p>Кількість проголосувавших: {votesCount}</p>
           <p>Проголосували: </p>
           <div className={styles.votedStatus.progressWrapper}>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+            <div className='w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700'>
               <div
-                className="bg-blue-600 h-2.5 rounded-full"
-                style={{ width: "45%" }}
+                className='bg-blue-600 h-2.5 rounded-full'
+                style={{ width: '45%' }}
               ></div>
             </div>
           </div>

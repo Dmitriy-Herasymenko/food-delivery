@@ -1,38 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { messagesAction, notificationAction, setNotification } from "./action";
-// import { Message } from "./types";
+import { createSlice } from '@reduxjs/toolkit';
+import { messagesAction, notificationAction, setNotification } from './action';
+ import { MessagesState } from './types';
 
-interface ChatState {
-  //    messages: Message[];
-  messages: any;
-  chatListMessages: any;
-  showNotification: boolean;
-  notificationMessage: string;
-  notificationUsername: string;
-}
 
-const initialState: ChatState = {
+const initialState: MessagesState = {
   messages: [],
   chatListMessages: [],
   showNotification: false,
-  notificationMessage: "",
-  notificationUsername: "",
+  unreadMessages: null,
+  notificationMessage: '',
+  notificationUsername: '',
+  userId: '',
+  chatUserId: '',
 };
 
 const messagesReducer = createSlice({
-  name: "messages",
+  name: 'messages',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(messagesAction.pending, (state) => {
       state.chatListMessages = [];
+      state.messages = [];
+      state.unreadMessages = null;
       state.showNotification = false;
+
     }),
       builder.addCase(messagesAction.fulfilled, (state, action) => {
-        state.chatListMessages = action.payload;
+        state.chatListMessages = action.payload.chatList;
+        state.messages = action.payload.messages;
+        state.unreadMessages = action.payload.unreadMessages;
+        state.userId = action.payload.userId;
       }),
-      builder.addCase(messagesAction.rejected, (state, action) => {
+      builder.addCase(messagesAction.rejected, (state) => {
         state.chatListMessages = [];
+        state.messages = [];
+        state.unreadMessages = null;
         state.showNotification = false;
       }),
       builder.addCase(notificationAction.fulfilled, (state, action) => {
