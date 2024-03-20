@@ -1,14 +1,17 @@
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
+
 import { classNames } from "./styles";
 import { Login } from "../../../shared/api";
 import { useNavigate } from "react-router-dom";
-
+import { setToken } from '../../../store/reducers/user/action';
 
 export const LogIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
 
   const LoginRequest = async () => {
     const data = {
@@ -17,7 +20,10 @@ export const LogIn = () => {
     };
 
     const response = await Login(data);
-    if(response) {
+
+    if (response) {
+      console.log("response", response)
+      dispatch(setToken(response?.data.token))
       navigate("/voiting");
     }
   };

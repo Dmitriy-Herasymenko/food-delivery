@@ -1,0 +1,20 @@
+export const styles = {
+    container: 'container mx-auto px-4 py-8',
+    wrapper: 'overflow-auto h-80 shadow-md p-10',
+    title: 'text-lg font-semibold mb-2',
+    wrapperMessage: 'flex justify-end',
+    nestedWrapper: 'bg-gray-100 rounded-md mb-2 p-5 w-3/4 border-[#000]',
+    userName: 'font-semibold',
+    wrapperForm: 'mt-10 flex justify-center flex-col w-2/4 m-auto',
+    textArea: 'border border-gray-300 rounded-md px-3 py-2 mr-2 bg-gray-100  text-left',
+    submitBtn: 'bg-blue-500 text-white px-4 py-2 rounded-md mt-5',
+    containerChatList: 'container mx-auto px-4 py-8',
+    chatTitle: 'text-2xl font-bold mb-4',
+    messageList: 'divide-y divide-gray-200',
+    messageItem: 'py-4 mt-10 flex',
+    messageIsUnread: 'bg-blue-100 rounded-lg',
+    messageImg: 'w-10 h-10 ml-5 rounded-full mr-4',
+    messageInfo: 'flex flex-col',
+    infoUsername: 'text-lg font-medium',
+    infoLastMessage: 'text-sm text-gray-500'
+}
