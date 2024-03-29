@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 import { classNames } from "./styles";
 import { Login } from "../../../shared/api";
 import { useNavigate } from "react-router-dom";
-import { setToken } from '../../../store/reducers/user/action';
+import { setToken } from "../../../store/reducers/user/action";
 
 export const LogIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -22,8 +22,8 @@ export const LogIn = () => {
     const response = await Login(data);
 
     if (response) {
-      console.log("response", response)
-      dispatch(setToken(response?.data.token))
+      console.log("response", response);
+      dispatch(setToken(response?.data.token));
       navigate("/voiting");
     }
   };
@@ -55,9 +55,7 @@ export const LogIn = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <a href={`/registration`} className={classNames.link}>
-            Registration
-          </a>
+
           <div>
             <button
               type="button"
@@ -66,6 +64,14 @@ export const LogIn = () => {
             >
               Login
             </button>
+            <div className={classNames.registrationWrapeer}>
+              <span className={classNames.titleLink}>
+                Сon't have an account?
+              </span>
+              <a href={`/registration`} className={classNames.link}>
+                Registration
+              </a>
+            </div>
           </div>
         </form>
       </div>

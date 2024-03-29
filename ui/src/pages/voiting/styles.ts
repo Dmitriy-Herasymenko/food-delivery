@@ -1,15 +1,15 @@
 export const styles = {
   createButtonWrapper: 'mt-10 flex items-center justify-center gap-x-6',
-  createButton: 'rounded-md bg-[#4F46E5] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
+  createButton: 'rounded-md bg-[#5d87ff] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
   votingStatus: {
-    container: ' bg-white p-6 rounded-md shadow-md',
+    container: 'bg-white p-6 rounded-md shadow-md',
     wrapper: 'mb-4',
     label: 'block text-sm font-medium text-gray-600',
     progressWrapper: 'mt-2',
     buttonSubmit: 'bg-blue-500 text-white p-2 rounded-md',
   },
   votingForm: {
-    container: 'max-w-md mx-auto bg-white p-6 rounded-md shadow-md',
+    container: 'mx-auto border-[1px] border-[#333f55] p-6 rounded-md shadow-md w-full',
   },
   votedStatus: {
     wrapper: 'mt-4',

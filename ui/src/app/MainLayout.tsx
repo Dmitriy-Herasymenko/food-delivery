@@ -1,19 +1,22 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from '../app/header';
 import { SideNavbar } from '../app/sidebar';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { getUser } from "../store/reducers/user/action";
 
 export const MainLayout = () => {
   // const [token, setToken] = useState(localStorage.getItem('token'));
-  // const { state } = useSelector(
-  //   (state: any) => console.log("state")
+  // const { user } = useSelector(
+  //   (state: any) => state?.userReducer
   // );
 
-  useSelector((state: any) => console.log("state", state))
+  const dispatch = useDispatch();
+
+  // console.log("user", user)
   // useEffect(() => {
   //   // Функція для оновлення токену
-  //   const updateToken = () => {
+  //   const updateToken = () => {=
   //     setToken(localStorage.getItem('token'));
   //   };
 
@@ -30,6 +33,22 @@ export const MainLayout = () => {
   //   // Оновлення токену при зміні localStorage
   //   setToken(localStorage.getItem('token'));
   // }, [localStorage.getItem('token')]); // Відслідковуємо зміну localStorage
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const id = localStorage.getItem("userId");
+        if (id) {
+          dispatch(getUser(id));
+        } else {
+          console.log("User ID is null");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   return (
       <div className="flex flex-col md:flex-row">

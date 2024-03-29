@@ -11,6 +11,7 @@ interface UserCreationAtrr {
     sentMessages: string[];
     receivedMessages: string[];
     unreadMessages: Message[];
+    profileImage: string;
 }
 export declare class User extends Model<User, UserCreationAtrr> {
     id: string;
@@ -20,5 +21,6 @@ export declare class User extends Model<User, UserCreationAtrr> {
     sentMessages: Message[];
     receivedMessages: Message[];
     unreadMessages: Message[];
+    profileImage: string;
 }
 export {};

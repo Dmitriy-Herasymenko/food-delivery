@@ -14,6 +14,7 @@ interface UserCreationAtrr {
   sentMessages: string[];
   receivedMessages: string[];
   unreadMessages: Message[]; 
+  profileImage: string;
 }
 
 @Table({ tableName: "users", timestamps: false })
@@ -60,4 +61,7 @@ export class User extends Model<User, UserCreationAtrr> {
 
   @Column({ type: DataType.JSONB, allowNull: false, defaultValue: [] })
   unreadMessages: Message[];
+
+  @Column({ type: DataType.TEXT, allowNull: true }) 
+  profileImage: string;
 }

@@ -18,13 +18,26 @@ const create_user_dto_1 = require("./dto/create-user.dto");
 const users_service_1 = require("./users.service");
 const swagger_1 = require("@nestjs/swagger");
 const users_model_1 = require("./users.model");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
+const path_1 = require("path");
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
     }
-    async create(userDto) {
+    async create(userDto, profileImage) {
         try {
-            return await this.userService.createUser(userDto);
+            const profileImageFilename = profileImage ? profileImage.filename : undefined;
+            return await this.userService.createUser(userDto, profileImageFilename);
+        }
+        catch (error) {
+            throw new common_1.NotFoundException(error.message);
+        }
+    }
+    async updateUser(body) {
+        const { id, userName, profileImageBase64, password } = body;
+        try {
+            return await this.userService.updateProfile(id, userName, profileImageBase64, password);
         }
         catch (error) {
             throw new common_1.NotFoundException(error.message);
@@ -68,11 +81,30 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Create user" }),
     (0, swagger_1.ApiResponse)({ status: 200, type: users_model_1.User }),
     (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('profileImage', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './uploads',
+            filename: (req, file, callback) => {
+                const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+                return callback(null, `${randomName}${(0, path_1.extname)(file.originalname)}`);
+            },
+        }),
+    })),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "create", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "Update user" }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: users_model_1.User }),
+    (0, common_1.Post)('update'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updateUser", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Get All Users" }),
     (0, swagger_1.ApiResponse)({ status: 200, type: [users_model_1.User] }),

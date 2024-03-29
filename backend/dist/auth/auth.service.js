@@ -32,7 +32,7 @@ let AuthService = class AuthService {
         const user = await this.userService.createUser({
             ...userDto,
             password: hashPassword,
-        });
+        }, null);
         return this.generateToken(user);
     }
     async generateToken(user) {

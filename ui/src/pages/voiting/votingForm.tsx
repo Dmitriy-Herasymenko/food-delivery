@@ -48,7 +48,7 @@ export const VotingForm: React.FC<VotingFormProps> = ({setCreatingVoting, creati
     <div className={styles.votingForm.container}>
       <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor='first-name' className='block text-sm font-semibold leading-6 text-gray-900'>
+            <label htmlFor='first-name' className='block text-sm leading-6 text-white'>
             Назва голосування
             </label>
             <div className='mt-2.5'>
@@ -57,13 +57,13 @@ export const VotingForm: React.FC<VotingFormProps> = ({setCreatingVoting, creati
                 name='first-name'
                 id='first-name'
                 onChange={(e) => setTitle(e.target.value)}
-                className='block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                className='block bg-[#2a3447] w-full rounded-md border-[#333f55] px-3.5 py-2 text-[14px] text-[#7c8fad] shadow-sm ring-1 ring-inset ring-[#333f55] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
               />
             </div>
           </div>
 
-        <div className='mt-2.5'>
-          <label htmlFor='startDate' className='block text-sm font-semibold leading-6 text-gray-900'>
+        <div className='mt-10'>
+          <label htmlFor='startDate' className='block text-sm  leading-6 text-white'>
             Початок голосування
           </label>
           <div className='mt-2.5'>
@@ -71,14 +71,14 @@ export const VotingForm: React.FC<VotingFormProps> = ({setCreatingVoting, creati
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             showTimeSelect
-            className='block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+            className='block bg-[#2a3447] w-full rounded-md border-0 px-3.5 py-2 text-[14px] text-[#7c8fad] shadow-sm ring-1 ring-inset ring-[#333f55] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
             dateFormat='Pp'
           />
           </div>
         </div>
 
-        <div className='mt-2.5'>
-          <label htmlFor='endDate' className='block text-sm font-semibold leading-6 text-gray-900'>
+        <div className='mt-10'>
+          <label htmlFor='endDate' className='block text-sm leading-6 text-white'>
             Закінчення голосування
           </label>
           <div className='mt-2.5'>
@@ -86,20 +86,20 @@ export const VotingForm: React.FC<VotingFormProps> = ({setCreatingVoting, creati
             selected={endDate}
             onChange={(date) => setEndDate(date)}
             showTimeSelect
-            className='block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+            className='block bg-[#2a3447] w-full rounded-md border-0 px-3.5 py-2 text-[14px] text-[#7c8fad] shadow-sm ring-1 ring-inset ring-[#333f55] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
             dateFormat='Pp'
           />
           </div>
         </div>
 
 
-        <div className='mt-2.5'>
-          <label htmlFor='options' className='block text-sm font-medium text-gray-600'>
+        <div className='mt-10'>
+          <label htmlFor='options' className='block text-sm text-white'>
             Опції
           </label>
           <div className='flex flex-col space-y-2  p-1'>
             {creatingVoting?.options.map((option, index) => (
-              <div key={index} className='flex items-center justify-between space-x-2 block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'>
+              <div key={index} className='flex items-center justify-between space-x-2 block bg-[#2a3447]  w-full rounded-md border-0 px-3.5 py-2 text-[14px] text-[#7c8fad] shadow-sm ring-1 ring-inset ring-[#333f55] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'>
                 <span>{option.description}</span>
                 <MdRemove onClick={() => handleRemoveOption(index)} className='text-2xl text-red-500 ml-2.5 group-hover:text-white cursor-pointer'/>
               </div>
@@ -112,7 +112,7 @@ export const VotingForm: React.FC<VotingFormProps> = ({setCreatingVoting, creati
               name='newOption'
               value={newOption.option}
               onChange={(e) => setNewOption({ ...newOption, option: e.target.value, description: e.target.value })}
-              className='block bg-[#fff]  w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+              className='block bg-[#2a3447] w-full rounded-md border-0 px-3.5 py-2 text-[14px] text-[#7c8fad] shadow-sm ring-1 ring-inset ring-[#333f55] placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
             />
             <MdAdd onClick={handleAddOption} className='text-2xl text-[#4F46E5] ml-2.5 group-hover:text-white cursor-pointer' />
           </div>
@@ -120,7 +120,7 @@ export const VotingForm: React.FC<VotingFormProps> = ({setCreatingVoting, creati
 
         <button
           type='submit'
-          className='mt-2.5 bg-[#4F46E5] text-white p-2 rounded-md mb-4'
+          className='mt-10 bg-[#5d87ff] text-white p-2 rounded-md mb-4'
         >
           Створити голосування
         </button>

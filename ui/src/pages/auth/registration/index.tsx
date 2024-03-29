@@ -61,9 +61,7 @@ export const Registration = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <a href={`/logIn`} className={classNames.link}>
-            LogIn
-          </a>
+    
           <div>
             <button
               type='button'
@@ -72,6 +70,12 @@ export const Registration = () => {
             >
               Registration
             </button>
+            <div className={classNames.registrationWrapeer}>
+          <span className={classNames.titleLink}>Have account?</span>
+          <a href={`/login`} className={classNames.link}>
+            Login
+          </a>
+          </div>
           </div>
         </form>
       </div>

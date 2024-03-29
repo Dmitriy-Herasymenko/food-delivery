@@ -17,22 +17,35 @@ const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const users_model_1 = require("./users.model");
 const users_gateway_1 = require("./users.gateway");
+const bcrypt = require("bcryptjs");
 let UsersService = class UsersService {
     constructor(userRepository, usersGateway) {
         this.userRepository = userRepository;
         this.usersGateway = usersGateway;
     }
-    async createUser(dto) {
-        const user = await this.userRepository.create(dto);
-        return user;
+    async createUser(dto, profileImage) {
+        const user = this.userRepository.create({
+            ...dto,
+            profileImage: profileImage,
+        });
+        return await user;
     }
     async getAllUsers() {
-        const users = await this.userRepository.findAll();
+        const users = await this.userRepository.findAll({
+            attributes: { exclude: ["password"] },
+        });
         return users;
     }
     async getUserById(id) {
-        const user = await this.userRepository.findByPk(id);
-        return user;
+        try {
+            const user = await this.userRepository.findOne({ where: { id: id } });
+            if (user) {
+                return user;
+            }
+        }
+        catch (error) {
+            throw new Error("Failed to fetch user");
+        }
     }
     async getUnreadMessageCount(userId) {
         try {
@@ -79,34 +92,42 @@ let UsersService = class UsersService {
             username: sender.userName,
             createdAt: Date.now(),
             userId: senderId,
+            profileImage: sender?.profileImage
         };
+        console.log("sender", sender);
         sender.sentMessages = sender.sentMessages || [];
         sender.sentMessages.push(message);
         receiver.receivedMessages = receiver.receivedMessages || [];
         receiver.receivedMessages.push(message);
         await this.userRepository.update({ sentMessages: sender.sentMessages }, { where: { id: senderId } });
         await this.userRepository.update({ receivedMessages: receiver.receivedMessages }, { where: { id: receiverId } });
-        const unreadCount = receiver.unreadMessages ? receiver.unreadMessages.length + 1 : 1;
+        const unreadCount = receiver.unreadMessages
+            ? receiver.unreadMessages.length + 1
+            : 1;
         if (unreadCount > 0) {
             receiver.unreadMessages = receiver.unreadMessages || [];
             receiver.unreadMessages.push(message);
             await this.userRepository.update({ unreadMessages: receiver.unreadMessages }, { where: { id: receiverId } });
-            this.usersGateway.server.to(receiverId).emit('newMessage', {
+            this.usersGateway.server.to(receiverId).emit("newMessage", {
                 message,
                 unreadCount,
             });
-            this.usersGateway.server.to(receiverId).emit('unreadMessages', receiver.unreadMessages);
+            this.usersGateway.server
+                .to(receiverId)
+                .emit("unreadMessages", receiver.unreadMessages);
         }
         else {
-            this.usersGateway.server.to(senderId).emit('newMessage', {
+            this.usersGateway.server.to(senderId).emit("newMessage", {
                 message,
                 unreadCount: 0,
             });
-            this.usersGateway.server.to(senderId).emit('unreadMessages', receiver.unreadMessages);
+            this.usersGateway.server
+                .to(senderId)
+                .emit("unreadMessages", receiver.unreadMessages);
         }
-        this.usersGateway.server.to(senderId).emit('messages', message);
-        this.usersGateway.server.to(receiverId).emit('messages', message);
-        this.usersGateway.server.emit('newMessage', message);
+        this.usersGateway.server.to(senderId).emit("messages", message);
+        this.usersGateway.server.to(receiverId).emit("messages", message);
+        this.usersGateway.server.emit("newMessage", message);
     }
     async markMessagesAsRead(userId, messageId) {
         try {
@@ -135,6 +156,19 @@ let UsersService = class UsersService {
         if (!user) {
             throw new common_1.NotFoundException(`User with ID ${userId} not found`);
         }
+        return user;
+    }
+    async updateProfile(userId, userName, profileImage, password) {
+        const user = await users_model_1.User.findByPk(userId);
+        if (!user) {
+            throw new common_1.NotFoundException("User not found");
+        }
+        user.userName = userName ?? user?.userName;
+        user.profileImage = profileImage ?? user?.profileImage;
+        if (password !== undefined) {
+            user.password = await bcrypt.hash(password, 5);
+        }
+        await user.save();
         return user;
     }
 };

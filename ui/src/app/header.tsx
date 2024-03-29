@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import { useSelector } from 'react-redux';
 import {  Link } from 'react-router-dom';
 
 export const Header = () => {
+  const { user } = useSelector(
+    (state: any) => state?.userReducer
+  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const userName = localStorage.getItem("userName");
 
   return (
-    <header className="bg-white shadow-md">
+    <header className="bg-[#2a3447]">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto flex items-center justify-between p-6 lg:px-8"
         aria-label="Global"
       >
         <div className="flex lg:hidden">
@@ -30,8 +33,8 @@ export const Header = () => {
         <div
           className="hidden lg:flex lg:flex-1 lg:justify-end items-center"
         >
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            {userName}
+          <a href="#" className="text-[14px] text-[#7c8fad]">
+            {user?.userName}
           </a>
           <img
             id="avatarButton"
@@ -39,7 +42,7 @@ export const Header = () => {
             data-dropdown-toggle="userDropdown"
             data-dropdown-placement="bottom-start"
             className="inline-block h-8 w-8 rounded-full ring-2 ml-2.5 ring-white"
-            src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            src={user?.profileImage}
             alt=""
           />
         </div>
@@ -49,7 +52,7 @@ export const Header = () => {
       {isOpenMenu && (
         <div
           id="userDropdown"
-          className=" absolute right-10 bg-[#4F46E5] divide-y divide-gray-100 rounded-lg shadow w-44"
+          className=" absolute right-10 border-[1px] border-[#333f55] divide-y divide-[#333f55] rounded-lg shadow w-44"
         >
           <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
             <div>Bonnie Green</div>

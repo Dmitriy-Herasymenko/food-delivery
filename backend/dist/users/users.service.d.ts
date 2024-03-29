@@ -5,7 +5,7 @@ export declare class UsersService {
     private userRepository;
     private usersGateway;
     constructor(userRepository: typeof User, usersGateway: UsersGateway);
-    createUser(dto: CreateUserDto): Promise<User>;
+    createUser(dto: CreateUserDto, profileImage: string): Promise<User>;
     getAllUsers(): Promise<User[]>;
     getUserById(id: string): Promise<User | null>;
     getUnreadMessageCount(userId: string): Promise<number>;
@@ -19,4 +19,5 @@ export declare class UsersService {
     markMessagesAsRead(userId: string, messageId: string): Promise<void>;
     getUnreadMessages(userId: string): Promise<any[]>;
     private findUserById;
+    updateProfile(userId: string, userName?: string, profileImage?: string, password?: string): Promise<User>;
 }

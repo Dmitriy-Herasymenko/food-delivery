@@ -5,6 +5,8 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #fff !important;
+  background-color: #2a3447 !important;
+  color: #eaeff4 !important;
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 

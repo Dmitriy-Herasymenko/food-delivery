@@ -65,6 +65,10 @@ __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.JSONB, allowNull: false, defaultValue: [] }),
     __metadata("design:type", Array)
 ], User.prototype, "unreadMessages", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.TEXT, allowNull: true }),
+    __metadata("design:type", String)
+], User.prototype, "profileImage", void 0);
 exports.User = User = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: "users", timestamps: false })
 ], User);
