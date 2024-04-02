@@ -92,9 +92,9 @@ let UsersService = class UsersService {
             username: sender.userName,
             createdAt: Date.now(),
             userId: senderId,
+            receiverId: receiverId,
             profileImage: sender?.profileImage
         };
-        console.log("sender", sender);
         sender.sentMessages = sender.sentMessages || [];
         sender.sentMessages.push(message);
         receiver.receivedMessages = receiver.receivedMessages || [];

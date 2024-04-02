@@ -3,12 +3,14 @@ import React, { useState, useEffect } from "react";
 interface NotificationProps {
   username: string;
   message: string;
+  image: string;
   onClose: () => void;
 }
 
 export const Notification: React.FC<NotificationProps> = ({
   username,
   message,
+  image,
   onClose,
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -29,7 +31,11 @@ export const Notification: React.FC<NotificationProps> = ({
       <div className="relative">
         <img
           className="w-10 h-10 rounded"
-          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          src={
+            image
+              ? image
+              : `https://via.placeholder.com/50?text=${username[0]}`
+          }
           alt="Medium avatar"
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}

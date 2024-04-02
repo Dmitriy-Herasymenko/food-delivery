@@ -7,6 +7,7 @@ export interface MessagesState {
     showNotification: boolean;
     notificationMessage: string;
     notificationUsername: string;
+    notificationImage: string;
     chatUserId: string,
     userId: string;
   }

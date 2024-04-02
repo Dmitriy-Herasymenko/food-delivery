@@ -1,15 +1,17 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import { SentMessage } from "../../shared/api";
 import { useTranslation } from "react-i18next";
 import { Messages, SentMessagesDataRequest, StateReducers } from "./types";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+
 import { styles } from "./styles";
 
 export const MessagesPage: React.FC = () => {
   const { messages, userId } = useSelector(
     (state: StateReducers) => state.messagesReducer
   );
+
   const { id } = useParams();
   const [newMessages, setNewMessages] = useState<string>("");
   const { t } = useTranslation();
@@ -30,25 +32,32 @@ export const MessagesPage: React.FC = () => {
     }
   };
 
-  const chatUsername = messages?.filter((user) => user.userId === id);
+  const chatUsername = messages?.find((user) => user.userId === id);
   console.log("id", id);
-  console.log("chatUsername", chatUsername);
+  console.log("chatUsername", messages);
+
+  if (!id) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.wrapperUsername}>
         <img
           className="inline-block h-8 w-8 rounded-full ring-2 ml-2.5 ring-white"
           src={
-            chatUsername[0]?.profileImage
-              ? chatUsername[0]?.profileImage
-              : `https://via.placeholder.com/50?text=${chatUsername[0]?.username[0]}`
+            chatUsername?.profileImage
+              ? chatUsername?.profileImage
+              : `https://via.placeholder.com/50?text=${chatUsername?.username[0]}`
           }
           alt=""
         />
         <h2 className={styles.title}>{chatUsername?.username}</h2>
       </div>
       <div className={styles.wrapper}>
-        {messages?.map((message: Messages, index: number) => (
+        {messages && messages
+        ?.filter((message: Messages) => message.userId === id  || message.receiverId === id)
+        ?.map((message: Messages, index: number) => (
           <div
             key={index}
             className={message.userId === userId ? styles.wrapperMessage : ""}

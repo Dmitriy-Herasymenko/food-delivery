@@ -9,7 +9,6 @@ import {
 } from "./types";
 import { ShowUsersIcon } from "../../assets/icons";
 import { useTranslation } from "react-i18next";
-import { CgProfile } from "react-icons/cg";
 import { styles } from "./styles";
 
 export const ChatListPage: React.FC = () => {
@@ -40,7 +39,6 @@ export const ChatListPage: React.FC = () => {
   const getAllUsers = async () => {
     const response = await Users();
     setUsers(response?.data);
-    console.log("response", response);
   };
 
   return (

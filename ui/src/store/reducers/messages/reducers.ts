@@ -10,6 +10,7 @@ const initialState: MessagesState = {
   unreadMessages: null,
   notificationMessage: '',
   notificationUsername: '',
+  notificationImage: '',
   userId: '',
   chatUserId: '',
 };
@@ -42,6 +43,7 @@ const messagesReducer = createSlice({
         state.showNotification = action.payload.showNotification;
         state.notificationMessage = action.payload.notificationMessage;
         state.notificationUsername = action.payload.notificationUsername;
+        state.notificationImage = action.payload.notificationImage;
       }),
       builder.addCase(setNotification.fulfilled, (state, action) => {
         state.showNotification = action.payload;

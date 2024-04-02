@@ -88,10 +88,13 @@ export const notificationAction = createAsyncThunk<
   { rejectValue: string }
 >("messages/newMessages", async (data, thunkAPI) => {
   try {
+    const USER_ID = localStorage.getItem("userId");
+    console.log("data", data)
     return {
-      showNotification: true,
+      showNotification: data?.userId === USER_ID ? false : true,
       notificationMessage: data.text,
       notificationUsername: data.username,
+      notificationImage: data?.profileImage
     };
   } catch (error) {
     return thunkAPI.rejectWithValue("Помилка отримання даних");
