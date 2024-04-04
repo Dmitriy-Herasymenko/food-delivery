@@ -9,7 +9,6 @@ export const Header = () => {
   );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-
   return (
     <header className="bg-[#2a3447]">
       <nav
@@ -55,8 +54,8 @@ export const Header = () => {
           className=" absolute right-10 border-[1px] border-[#333f55] divide-y divide-[#333f55] rounded-lg shadow w-44"
         >
           <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div>Bonnie Green</div>
-            <div className="font-medium truncate">name@flowbite.com</div>
+            <div>{user?.userName}</div>
+            <div className="font-medium truncate">{user?.email}</div>
           </div>
           <ul
             className="py-2 text-sm text-gray-700 dark:text-gray-200"

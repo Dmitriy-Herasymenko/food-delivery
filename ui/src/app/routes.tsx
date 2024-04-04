@@ -15,18 +15,6 @@ export const routes = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: "/",
-        element: <LogIn />,
-      },
-      {
-        path: "/logIn",
-        element: <LogIn />,
-      },
-      {
-        path: "/registration",
-        element: <Registration />,
-      },
-      {
         path: "/messages",
         element: <ChatListPage />,
       },
@@ -58,7 +46,7 @@ export const routesNonToken = createBrowserRouter([
         element: <LogIn />,
       },
       {
-        path: "/logIn",
+        path: "/login",
         element: <LogIn />,
       },
       {

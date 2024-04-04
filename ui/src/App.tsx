@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { routes, routesNonToken } from "./app/routes";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,11 @@ import { useSelector } from "react-redux";
 import { setNotification } from "./store/reducers/messages/action";
 import io from "socket.io-client";
 
+import AuthProvider from "./provider/authProvider";
+import Routes from "./routes";
+
+
+
 export const App = () => {
   const dispatch = useDispatch();
 
@@ -18,12 +23,13 @@ export const App = () => {
     showNotification,
     notificationMessage,
     notificationUsername,
-    notificationImage,
-    userId,
+    notificationImage
   } = useSelector((state) => state?.messagesReducer);
-  const token = localStorage.getItem("token");
+  
+  
   const USER_ID = localStorage.getItem("userId");
-  console.log("userId", userId);
+
+
   useEffect(() => {
     const socket = io("ws://localhost:5000", {
       query: { userId: USER_ID },
@@ -37,6 +43,8 @@ export const App = () => {
       dispatch(messagesAction());
     });
 
+    
+
     return () => {
       socket.off("newMessage");
     };
@@ -44,11 +52,9 @@ export const App = () => {
 
   return (
     <>
-      {token ? (
-        <RouterProvider router={routes} />
-      ) : (
-        <RouterProvider router={routesNonToken} />
-      )}
+   <AuthProvider>
+      <Routes />
+    </AuthProvider>
       {showNotification && (
         <Notification
           username={notificationUsername}
